@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 type Tiers =
   | 'iron'
   | 'bronze'
@@ -91,7 +93,7 @@ const TierCard = (stats: TierCardProps) => {
   const { tier, lp, grade } = mmrToTier(mmr, rank)
   return (
     <div
-      className={`card w-full`}
+      className="card w-full min-h-[280px]"
       style={{
         backgroundImage: `url('/images/tiers/${tier}.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, rgb(var(--color-${tier})))`,
         backgroundRepeat: 'no-repeat',
@@ -112,7 +114,6 @@ const TierCard = (stats: TierCardProps) => {
             <ul
               className="text-white text-base font-bold"
               style={{
-                // backgroundImage: `rgb(var(--color-${tier}))`,
                 backgroundImage: `#fff`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right',
@@ -125,34 +126,43 @@ const TierCard = (stats: TierCardProps) => {
               >
                 {matchginMode(matchingTeamMode)}
               </h2>
-              <li>{nickname}</li>
-              <li>
-                {tier} {grade} {lp}LP
-              </li>
-              {/* <li>MMR : {mmr}</li> */}
-              <li>
-                {rank}위{' '}
-                <span className="italic">
-                  (상위 {rankPercent(rank, rankSize)} %)
-                </span>
-              </li>
+              {mmr === 0 ? (
+                <li>UNRANKED</li>
+              ) : (
+                <>
+                  <li>
+                    {tier} {grade} {lp}LP
+                  </li>
+                  {/* <li>MMR : {mmr}</li> */}
+                  <li>
+                    {rank}위{' '}
+                    <span className="italic">
+                      (상위 {rankPercent(rank, rankSize)} %)
+                    </span>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
-          <ul className="mt-2 font-bold">
-            {showWinRate ? (
-              <li>승률: {winPercent(totalGames, totalWins)}%</li>
-            ) : (
-              ''
-            )}
-            {showTotalGames ? <li>게임 수: {totalGames}</li> : ''}
-            {showAverageRank ? <li>평균 순위: {averageRank}</li> : ''}
-            {showAverageKills ? <li>평균 킬: {averageKills}</li> : ''}
-            {showAverageHunts ? <li>평균 사냥: {averageHunts}</li> : ''}
-          </ul>
+          {mmr === 0 ? (
+            ''
+          ) : (
+            <ul className="mt-2 font-bold">
+              {showWinRate ? (
+                <li>승률: {winPercent(totalGames, totalWins)}%</li>
+              ) : (
+                ''
+              )}
+              {showTotalGames ? <li>게임 수: {totalGames}</li> : ''}
+              {showAverageRank ? <li>평균 순위: {averageRank}</li> : ''}
+              {showAverageKills ? <li>평균 킬: {averageKills}</li> : ''}
+              {showAverageHunts ? <li>평균 사냥: {averageHunts}</li> : ''}
+            </ul>
+          )}
         </>
       </div>
     </div>
   )
 }
-
-export default TierCard
+const MemoTierCard = memo(TierCard)
+export { TierCard, MemoTierCard }

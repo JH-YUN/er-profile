@@ -5,10 +5,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { Popover } from '@headlessui/react'
-import TierCard from '../../components/TierCard'
-import CharacterCard from '../../components/CharacterCard'
+import { TierCard, MemoTierCard } from '../../components/TierCard'
+import {
+  CharacterCard,
+  MemoCharacterCard,
+} from '../../components/CharacterCard'
 import { SettingPopover } from '../../components/SettingPopover'
-
+import { CameraIcon } from '@heroicons/react/20/solid'
+import * as htmltoimage from 'html-to-image'
 interface userProps {
   // userNum: number
   error: object
@@ -32,7 +36,27 @@ const User = ({ error, userStats, seasons, selectedSeason }: userProps) => {
   const onChangeSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.replace(`/users/${router.query.nickname}?season=${e.target.value}`)
   }
+  // 캡쳐 버튼 클릭시 캡쳐
+  const onClickCaputre = async () => {
+    if (typeof window !== 'undefined') {
+      console.log(htmltoimage)
+      const captureNode = document.getElementById('capture-area')
+      htmltoimage
+        .toJpeg(captureNode)
+        .then((dataUrl) => {
+          const link = document.createElement('a')
+          link.download = 'my-image-name.jpg'
+          link.href = dataUrl
+          link.click()
+        })
+        .catch((err) => {
+          alert('캡쳐 실패, 잠시 후 다시 시도해주세요.')
+          console.log(err)
+        })
+    }
+  }
 
+  const [showMode, setShowMode] = useState<Array<number>>([1, 2, 3])
   const [showWinRate, setShowWinRate] = useState(true)
   const [showTotalGames, setShowTotalGames] = useState(true)
   const [showAverageRank, setShowAverageRank] = useState(true)
@@ -40,52 +64,73 @@ const User = ({ error, userStats, seasons, selectedSeason }: userProps) => {
   const [showAverageHunts, setShowAverageHunts] = useState(true)
 
   return (
-    <div className="container">
-      <div className="card flex mb-10 justify-between">
-        <h1 className="text-2xl font-bold">{router.query.nickname}</h1>
-        <div className="flex gap-3">
-          <select defaultValue={selectedSeason} onChange={onChangeSeason}>
-            {seasons.map((season) => (
-              <option key={season.seasonID} value={season.seasonID}>
-                {season.seasonName}
-              </option>
-            ))}
-          </select>
-          <SettingPopover
-            showWinRate={showWinRate}
-            showTotalGames={showTotalGames}
-            showAverageRank={showAverageRank}
-            showAverageKills={showAverageKills}
-            showAverageHunts={showAverageHunts}
-            setShowWinRate={setShowWinRate}
-            setShowTotalGames={setShowTotalGames}
-            setShowAverageRank={setShowAverageRank}
-            setShowAverageKills={setShowAverageKills}
-            setShowAverageHunts={setShowAverageHunts}
-          />
-        </div>
-      </div>
-      <div className="flex justify-center gap-10">
-        {userStats.map((stats: any) => (
-          <div className="flex flex-col w-full" key={stats.matchingTeamMode}>
-            <TierCard
-              {...stats}
+    <>
+      <div className="container">
+        <div className="card flex mb-5 justify-between">
+          <h1 className="text-2xl font-bold">{`${router.query.nickname}의 프로필`}</h1>
+          <div className="flex gap-3">
+            <select defaultValue={selectedSeason} onChange={onChangeSeason}>
+              {seasons.map((season) => (
+                <option key={season.seasonID} value={season.seasonID}>
+                  {season.seasonName}
+                </option>
+              ))}
+            </select>
+            <SettingPopover
+              showMode={showMode}
               showWinRate={showWinRate}
               showTotalGames={showTotalGames}
               showAverageRank={showAverageRank}
               showAverageKills={showAverageKills}
               showAverageHunts={showAverageHunts}
+              setShowMode={setShowMode}
+              setShowWinRate={setShowWinRate}
+              setShowTotalGames={setShowTotalGames}
+              setShowAverageRank={setShowAverageRank}
+              setShowAverageKills={setShowAverageKills}
+              setShowAverageHunts={setShowAverageHunts}
             />
-            {stats.characterStats?.map((characterStat: any) => (
-              <CharacterCard
-                key={characterStat.characterCode}
-                {...characterStat}
+            <button>
+              <CameraIcon
+                onClick={onClickCaputre}
+                className="h-8 w-8 text-slate-100 transition duration-150 ease-in-out group-hover:text-opacity-80`}"
+                aria-hidden="true"
               />
-            ))}
+            </button>
           </div>
-        ))}
+        </div>
+        <div id="capture-area" className="flex gap-10 justify-start">
+          {userStats.map((stats: any) => (
+            <>
+              {
+                <div
+                  className={`${
+                    !showMode.includes(stats.matchingTeamMode) ? 'hidden' : ''
+                  } flex flex-col w-full max-w-[400px]`}
+                  key={stats.matchingTeamMode}
+                >
+                  <MemoTierCard
+                    key={stats.matchingTeamMode}
+                    {...stats}
+                    showWinRate={showWinRate}
+                    showTotalGames={showTotalGames}
+                    showAverageRank={showAverageRank}
+                    showAverageKills={showAverageKills}
+                    showAverageHunts={showAverageHunts}
+                  />
+                  {stats.characterStats?.map((characterStat: any) => (
+                    <MemoCharacterCard
+                      key={characterStat.characterCode}
+                      {...characterStat}
+                    />
+                  ))}
+                </div>
+              }
+            </>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

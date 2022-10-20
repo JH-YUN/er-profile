@@ -4,14 +4,16 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@heroicons/react/24/solid'
-import { Dispatch, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 interface SettingPopoverProps {
+  showMode: Array<number>
   showWinRate: boolean
   showTotalGames: boolean
   showAverageRank: boolean
   showAverageKills: boolean
   showAverageHunts: boolean
+  setShowMode: Dispatch<SetStateAction<number[]>>
   setShowWinRate: Dispatch<boolean>
   setShowTotalGames: Dispatch<boolean>
   setShowAverageRank: Dispatch<boolean>
@@ -20,11 +22,13 @@ interface SettingPopoverProps {
 }
 
 export const SettingPopover = ({
+  showMode,
   showWinRate,
   showTotalGames,
   showAverageRank,
   showAverageKills,
   showAverageHunts,
+  setShowMode,
   setShowWinRate,
   setShowTotalGames,
   setShowAverageRank,
@@ -47,6 +51,54 @@ export const SettingPopover = ({
           </Popover.Button>
           <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0">
             <div className="relative grid grid-cols-1 gap-4 bg-zinc-800 p-5 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+              <div
+                className="inline-flex rounded-md shadow-sm justify-center"
+                role="group"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    showMode.includes(1)
+                      ? setShowMode([...showMode.filter((mode) => mode !== 1)])
+                      : setShowMode([1, ...showMode])
+                  }}
+                  className={
+                    'py-2 px-4 text-sm font-medium text-gray-300 rounded-l-lg border border-gray-900 hover:bg-teal-700 hover:text-white ' +
+                    (showMode.includes(1) ? ' bg-teal-900' : 'bg-translate')
+                  }
+                >
+                  Solo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    showMode.includes(2)
+                      ? setShowMode([...showMode.filter((mode) => mode !== 2)])
+                      : setShowMode([2, ...showMode])
+                  }}
+                  className={
+                    'py-2 px-4 text-sm font-medium text-gray-300 border-t border-b border-gray-900 hover:bg-teal-700 hover:text-white ' +
+                    (showMode.includes(2) ? ' bg-teal-900' : 'bg-translate')
+                  }
+                >
+                  Duo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    showMode.includes(3)
+                      ? setShowMode([...showMode.filter((mode) => mode !== 3)])
+                      : setShowMode([3, ...showMode])
+                  }}
+                  className={
+                    'py-2 px-4 text-sm font-medium text-gray-300 rounded-r-md border border-gray-900 hover:bg-teal-700 hover:text-white ' +
+                    (showMode.includes(3) ? ' bg-teal-900' : 'bg-translate')
+                  }
+                >
+                  Squard
+                </button>
+              </div>
+
               <div className="flex justify-between gap-3">
                 <span>승률 표시</span>
                 <Switch

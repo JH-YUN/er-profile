@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
 interface CharacterCardProps {
   characterCode: number
@@ -12,8 +12,28 @@ interface Character {
   resource: string
 }
 
+interface CharacterSkin {
+  name: string
+  index: number
+  grade: number
+  code: number
+}
+
 const getWinRate = (wins: number, total: number) => {
   return Math.round((wins / total) * 1000) / 10
+}
+
+const createSkinImageName = (
+  characterName: string,
+  skinIndex: number,
+  size: 'mini' | 'half' | 'full' = 'mini'
+) => {
+  const maxIndexLen = 3
+
+  return `${characterName}_S${String(skinIndex).padStart(
+    maxIndexLen,
+    '0'
+  )}_${size}`
 }
 
 const CharacterCard = ({
@@ -23,7 +43,8 @@ const CharacterCard = ({
   top3,
 }: CharacterCardProps) => {
   const [character, setCharacter] = useState<Character>()
-  const [skins, setSkins] = useState([])
+  const [skins, setSkins] = useState<Array<CharacterSkin>>([])
+  const [seletedSkinIndex, setSelectedSkinIndex] = useState<number>(0)
   const getCharacter = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER}/api/characters/${characterCode}`
@@ -40,6 +61,11 @@ const CharacterCard = ({
       setSkins(await res.json())
     }
   }
+
+  const onChangeSkin = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const skinIndex = Number(e.target.value)
+    setSelectedSkinIndex(skinIndex)
+  }
   useEffect(() => {
     getCharacter()
     getCharacterSkins()
@@ -51,7 +77,7 @@ const CharacterCard = ({
           <div className="flex animate-pulse">
             <div
               className="mr-3 rounded bg-neutral-600"
-              style={{ width: 122, height: 160 }}
+              style={{ width: 73.2, height: 96 }}
             ></div>
             <div className="flex-1">
               <div className="h-4 bg-neutral-600 rounded mb-3"></div>
@@ -61,18 +87,30 @@ const CharacterCard = ({
           </div>
         </div>
       ) : (
-        <div className="card mt-2">
+        <div className="card mt-2 py-2 px-4">
+          <div className="text-right mb-2">
+            <select className="w-[100px]" onChange={onChangeSkin}>
+              {skins.map((skin) => (
+                <option key={skin.code} value={skin.index}>
+                  {skin.index === 0 ? '기본 스킨' : skin.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="flex">
-            <div className="mr-3">
+            <div className="mr-5">
               <Image
-                src={`/images/characters/${character.resource}_S000_Mini.png`}
-                width={122}
-                height={160}
+                src={`/images/characters/${createSkinImageName(
+                  character.resource,
+                  seletedSkinIndex
+                )}.png`}
+                width={73.2}
+                height={96}
                 alt={character.name}
               />
             </div>
-            <ul className="text-white text-base font-bold">
-              <li>{character.name}</li>
+            <ul className="text-white text-base font-bold self-center">
+              {/* <li>{character.nameKor}</li> */}
               {totalGames ? <li>게임 수: {totalGames}</li> : ''}
               {wins !== undefined && totalGames !== undefined ? (
                 <li>승률: {getWinRate(wins, totalGames)}%</li>
@@ -93,3 +131,5 @@ const CharacterCard = ({
 }
 
 export default CharacterCard
+
+export const MemoCharacterCard = memo(CharacterCard)
