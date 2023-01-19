@@ -9,31 +9,62 @@
     padding: theme('spacing.6');
     box-shadow: theme('boxShadow.xl');
     color: #9da3a9;
-    /* background:linear-gradient(180deg, rgba(var(--colors-diamondRGB), 0.05) 0%, rgba(var(--colors-diamondRGB), 0) 100%), radial-gradient(circle at 40px 40px, rgba(var(--colors-diamondRGB), 0.3) 0%, rgba(var(--colors-diamondRGB), 0) 55%), var(--colors-elevation100); */
   }
-  .card-title {
 
-  }
-  .card-contents {
+  .card-title {}
 
-  }
+  .card-contents {}
+
   .container {
     margin: 0 auto;
   }
+
 }
+
+@layer utilities {
+  .tooltip {
+    width: 300px !important;
+    z-index:10
+  }
+}
+
 @layer base {
   body {
     background-color: #373737;
   }
+
   :root {
-    --color-unrank : 129 134 145;
-    --color-iron : 78 84 88;
-    --color-bronze : 172 91 43;
-    --color-silver : 231 234 244;
-    --color-gold : 255 232 140;
-    --color-platinum : 78 168 181;
-    --color-diamond : 216 199 222;
-    --color-demigod : 226 231 203;
-    --color-eternity : 205 49 107;
+    /* 티어 컬러 */
+    --color-unrank: 129 134 145;
+    --color-iron: 78 84 88;
+    --color-bronze: 172 91 43;
+    --color-silver: 231 234 244;
+    --color-gold: 255 232 140;
+    --color-platinum: 78 168 181;
+    --color-diamond: 216 199 222;
+    --color-demigod: 226 231 203;
+    --color-eternity: 205 49 107;
+
+    /* 아이템 컬러 */
+    --color-common-bottom: #5b5e60;
+    --color-uncommon-bottom: #476b4a;
+    --color-rare-bottom: #344a6d;
+    --color-epic-bottom: #654987;
+    --color-legend-bottom: #9c7633;
+    --color-mythic-bottom: #a04343;
+
+    --color-common-top: #252626;
+    --color-uncommon-top: #1f261a;
+    --color-rare-top: #222631;
+    --color-epic-top: #292639;
+    --color-legend-top: #352c20;
+    --color-mythic-top: #3d2120;
+
+    --color-common-border: #696969;
+    --color-uncommon-border: #68814c;
+    --color-rare-border: #465f86;
+    --color-epic-border: #a68f4a;
+    --color-legend-border: #a68f4a;
+    --color-mythic-border: #3d2120;
   }
 }

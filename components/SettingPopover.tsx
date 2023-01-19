@@ -6,21 +6,6 @@ import {
 } from '@heroicons/react/24/solid'
 import { Dispatch, SetStateAction, useState } from 'react'
 
-interface SettingPopoverProps {
-  showMode: Array<number>
-  showWinRate: boolean
-  showTotalGames: boolean
-  showAverageRank: boolean
-  showAverageKills: boolean
-  showAverageHunts: boolean
-  setShowMode: Dispatch<SetStateAction<number[]>>
-  setShowWinRate: Dispatch<boolean>
-  setShowTotalGames: Dispatch<boolean>
-  setShowAverageRank: Dispatch<boolean>
-  setShowAverageKills: Dispatch<boolean>
-  setShowAverageHunts: Dispatch<boolean>
-}
-
 export const SettingPopover = ({
   showMode,
   showWinRate,

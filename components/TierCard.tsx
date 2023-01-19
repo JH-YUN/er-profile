@@ -50,26 +50,7 @@ const rankPercent = (rank: number, rankSize: number) => {
 const winPercent = (total: number, wins: number) => {
   return Math.round((wins / total) * 1000) / 10
 }
-export interface TierCardProps {
-  seasonId: number
-  matchingTeamMode: number
-  mmr: number
-  rank: number
-  rankSize: number
-  top1: number
-  top2: number
-  nickname: string
-  totalGames: string
-  totalWins: number
-  averageRank: string
-  averageKills: string
-  averageHunts: string
-  showWinRate: boolean
-  showTotalGames: boolean
-  showAverageRank: boolean
-  showAverageKills: boolean
-  showAverageHunts: boolean
-}
+
 const TierCard = (stats: TierCardProps) => {
   const {
     seasonId,

@@ -6,36 +6,95 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { Popover } from '@headlessui/react'
 import { TierCard, MemoTierCard } from '../../components/TierCard'
-import {
-  CharacterCard,
-  MemoCharacterCard,
-} from '../../components/CharacterCard'
+import { MemoCharacterCard } from '../../components/CharacterCard'
 import { SettingPopover } from '../../components/SettingPopover'
 import { CameraIcon } from '@heroicons/react/20/solid'
 import * as htmltoimage from 'html-to-image'
-interface userProps {
-  // userNum: number
-  error: object
-  userStats: Array<any>
-  seasons: Array<any>
-  selectedSeason: string
-}
-interface HTTPResponse<T> {
-  inError: boolean
-  code: number
-  message: string
-  data?: T
-}
-interface SettingPopoverOption {
-  name: string
-  isOn: boolean
-}
+import { Games } from '../../components/Games'
+import { RssIcon } from '@heroicons/react/24/solid'
 
-const User = ({ error, userStats, seasons, selectedSeason }: userProps) => {
+const User = ({
+  error,
+  userStats,
+  seasons,
+  selectedSeason,
+  userNum,
+}: userProps) => {
   const router = useRouter()
+  const [characters, setCharacters] = useState<Array<Character>>([])
+  const [characterSkins, setCharacterSkins] = useState<Array<CharacterSkin>>([])
+  const [items, setItems] = useState<Array<Item>>([])
+  const [traits, setTraits] = useState<Array<Trait>>([])
+  const [stats, setStats] = useState<Array<Stat>>([])
+  const [gameResults, setGameResults] = useState<Array<GameResult>>([])
+  const [nextGameId, setNextGameId] = useState<number>()
+
   const onChangeSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.replace(`/users/${router.query.nickname}?season=${e.target.value}`)
   }
+
+  const getCharacters = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/characters`)
+    if (res.ok) {
+      setCharacters(await res.json())
+    }
+  }
+  const getCharacterSkins = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_ER_API_URL}/character-skins`
+    )
+    if (res.ok) {
+      const skins = await res.json()
+      setCharacterSkins(skins)
+    }
+  }
+  const getItems = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/items`)
+    if (res.ok) {
+      const items = await res.json()
+      setItems(items)
+    }
+  }
+  const getTraits = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/traits`)
+    if (res.ok) {
+      const traits = await res.json()
+      setTraits(traits)
+    }
+  }
+
+  const getStats = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/stats`)
+    if (res.ok) {
+      const stats = await res.json()
+      setStats(stats)
+    }
+  }
+
+  const getRecentGames = async (next: number | string = '') => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER}/api/user-games/${userNum}?next=${next}`
+    )
+    if (res.ok) {
+      const { userGames, next } = await res.json()
+      setGameResults((prev) => [...prev, ...userGames])
+      setNextGameId(next)
+    }
+  }
+
+  const getMoreGames = async () => {
+    getRecentGames(nextGameId)
+  }
+
+  useEffect(() => {
+    getCharacters()
+    getCharacterSkins()
+    getItems()
+    getRecentGames()
+    getTraits()
+    getStats()
+  }, [])
+
   // 캡쳐 버튼 클릭시 캡쳐
   const onClickCaputre = async () => {
     if (typeof window !== 'undefined') {
@@ -99,7 +158,7 @@ const User = ({ error, userStats, seasons, selectedSeason }: userProps) => {
             </button>
           </div>
         </div>
-        <div id="capture-area" className="flex gap-10 justify-start">
+        <div id="capture-area" className="flex gap-10 justify-start mb-3">
           {userStats.map((stats: any) => (
             <>
               {
@@ -122,6 +181,12 @@ const User = ({ error, userStats, seasons, selectedSeason }: userProps) => {
                     <MemoCharacterCard
                       key={characterStat.characterCode}
                       {...characterStat}
+                      character={characters.find(
+                        (el) => el.code === characterStat.characterCode
+                      )}
+                      characterSkins={characterSkins.filter(
+                        (el) => el.characterCode === characterStat.characterCode
+                      )}
                     />
                   ))}
                 </div>
@@ -129,6 +194,14 @@ const User = ({ error, userStats, seasons, selectedSeason }: userProps) => {
             </>
           ))}
         </div>
+        <Games
+          gameResults={gameResults}
+          getMoreGames={getMoreGames}
+          characters={characters}
+          traits={traits}
+          items={items}
+          stats={stats}
+        />
       </div>
     </>
   )
@@ -195,29 +268,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     ]
   }
-  // const getSeasons = async () => {
-  //   const config = {
-  //     method: 'GET',
-  //     headers: {
-  //       'x-api-key': process.env.API_KEY,
-  //       Accept: 'application/json',
-  //     },
-  //   }
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.API_URL}/v1/data/Season`,
-  //       config as RequestInit
-  //     )
-  //     if (response.ok) {
-  //       return await response.json()
-  //     } else {
-  //       throw new Error(`season error: ${response.statusText}`)
-  //     }
-  //   } catch (e) {
-  //     console.error(e)
-  //     throw new Error()
-  //   }
-  // }
 
   // 유저 정보 가져오기
   const getUserStats = async (
@@ -295,6 +345,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         userStats: userStats,
         seasons: seasons,
         selectedSeason: selectedSeason,
+        userNum: user.userNum,
       },
     }
   } catch (err) {
@@ -307,11 +358,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 }
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   return {
-//     props: {},
-//   }
-// }
 
 export default User

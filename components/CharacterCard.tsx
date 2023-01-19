@@ -1,23 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
-interface CharacterCardProps {
-  characterCode: number
-  totalGames?: number
-  wins?: number
-  top3?: number
-}
-interface Character {
-  code: number
-  name: string
-  resource: string
-}
-
-interface CharacterSkin {
-  name: string
-  index: number
-  grade: number
-  code: number
-}
+import { useCharacterImage, ImageOption } from '../hooks/useCharacterImage'
 
 const getWinRate = (wins: number, total: number) => {
   return Math.round((wins / total) * 1000) / 10
@@ -41,35 +24,20 @@ const CharacterCard = ({
   totalGames,
   wins,
   top3,
+  character,
+  characterSkins,
 }: CharacterCardProps) => {
-  const [character, setCharacter] = useState<Character>()
-  const [skins, setSkins] = useState<Array<CharacterSkin>>([])
-  const [seletedSkinIndex, setSelectedSkinIndex] = useState<number>(0)
-  const getCharacter = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/characters/${characterCode}`
-    )
-    if (res.ok) {
-      setCharacter(await res.json())
-    }
-  }
-  const getCharacterSkins = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/character-skins/${characterCode}`
-    )
-    if (res.ok) {
-      setSkins(await res.json())
-    }
-  }
-
+  const [selectedSkinIndex, setSelectedSkinIndex] = useState<number>(0)
+  const characterImagePath = useCharacterImage({
+    characterName: character?.resource,
+    skinIndex: selectedSkinIndex,
+    size: 'mini',
+  })
   const onChangeSkin = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const skinIndex = Number(e.target.value)
     setSelectedSkinIndex(skinIndex)
   }
-  useEffect(() => {
-    getCharacter()
-    getCharacterSkins()
-  }, [])
+
   return (
     <>
       {!character ? (
@@ -90,7 +58,7 @@ const CharacterCard = ({
         <div className="card mt-2 py-2 px-4">
           <div className="text-right mb-2">
             <select className="w-[100px]" onChange={onChangeSkin}>
-              {skins.map((skin) => (
+              {characterSkins.map((skin) => (
                 <option key={skin.code} value={skin.index}>
                   {skin.index === 0 ? '기본 스킨' : skin.name}
                 </option>
@@ -100,13 +68,10 @@ const CharacterCard = ({
           <div className="flex">
             <div className="mr-5">
               <Image
-                src={`/images/characters/${createSkinImageName(
-                  character.resource,
-                  seletedSkinIndex
-                )}.png`}
+                src={characterImagePath}
                 width={73.2}
                 height={96}
-                alt={character.name}
+                alt={character?.name}
               />
             </div>
             <ul className="text-white text-base font-bold self-center">

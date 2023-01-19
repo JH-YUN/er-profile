@@ -20,7 +20,17 @@ const getCharacterSkins = async () => {
 
     if (!response.ok) throw response.statusText
 
-    return response.json()
+    // 케릭터 이름 한글화
+    const skins = await response.json()
+    const l10nResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER}/api/l10n/Korean`
+    )
+    if (!l10nResponse.ok) throw l10nResponse.statusText
+    const l10nData = await l10nResponse.json()
+
+    return skins.data.map((el: { code: any }) => {
+      return { ...el, name: l10nData[`Skin/Name/${el.code}`] }
+    })
   } catch (e) {
     console.log(e)
     return
@@ -36,7 +46,7 @@ export default async function handler(
   if (cachedData) {
     res.status(200).json(cachedData)
   } else {
-    const { data } = await getCharacterSkins()
+    const data = await getCharacterSkins()
     nodeCache.set('characterSkins', data)
     res.status(200).json(data)
   }
