@@ -158,14 +158,17 @@ const User = ({
             </button>
           </div>
         </div>
-        <div id="capture-area" className="flex gap-10 justify-start mb-3">
+        <div
+          id="capture-area"
+          className="flex flex-col w-full items-center lg:flex-row lg:items-start gap-10  mb-3"
+        >
           {userStats.map((stats: any) => (
             <>
               {
                 <div
                   className={`${
                     !showMode.includes(stats.matchingTeamMode) ? 'hidden' : ''
-                  } flex flex-col w-full max-w-[400px]`}
+                  } flex flex-col w-full`}
                   key={stats.matchingTeamMode}
                 >
                   <MemoTierCard

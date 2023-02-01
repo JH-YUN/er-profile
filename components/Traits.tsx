@@ -19,25 +19,23 @@ export const Traits = (props: TraitsProps) => {
   }, [])
   return (
     <TooltipProvider>
-      <div className="flex flex-col gap-2 mx-[30px]">
-        <div className="flex gap-1 items-end">
+      <div className="flex flex-col gap-2 lg:mx-[30px]">
+        <div className="flex xl:gap-1 items-end">
           <TooltipWrapper html={createTooltip(firstCoreTrait)}>
-            <div className="bg-slate-600 border-2 rounded-full w-[45px] h-[45px]">
+            <div className="bg-slate-600 border-2 rounded-full w-[35px] h-[35px] lg:w-[45px] lg:h-[45px] relative">
               <Image
                 src={`/images/traits/${firstCoreTrait.code}.png`}
-                width="45"
-                height="45"
+                layout="fill"
                 alt={firstCoreTrait.name}
               />
             </div>
           </TooltipWrapper>
           {firstSubTrait?.map((trait, i) => (
             <TooltipWrapper key={trait.code} html={createTooltip(trait)}>
-              <div className="bg-slate-600 border-2 rounded-full w-[35px] h-[35px]">
+              <div className="bg-slate-600 border-2 rounded-full w-[35px] h-[35px] hidden xl:flex relative">
                 <Image
                   src={`/images/traits/${trait.code}.png`}
-                  width="35"
-                  height="35"
+                  layout="fill"
                   alt={trait.name}
                 />
               </div>
@@ -45,14 +43,13 @@ export const Traits = (props: TraitsProps) => {
           ))}
         </div>
 
-        <div className="flex gap-1 items-end justify-end">
+        <div className="xl:flex xl:w-[123px] gap-1 items-end justify-end hidden ">
           {secondSubTrait.map((trait) => (
             <TooltipWrapper key={trait.code} html={createTooltip(trait)}>
-              <div className="bg-slate-600 border-2 rounded-full w-[35px] h-[35px]">
+              <div className="bg-slate-600 border-2 rounded-full w-[35px] h-[35px] relative">
                 <Image
                   src={`/images/traits/${trait.code}.png`}
-                  width="35"
-                  height="35"
+                  layout="fill"
                   alt={trait.name}
                 />
               </div>

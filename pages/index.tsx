@@ -21,23 +21,31 @@ const Home: NextPage = () => {
     }
   }
   return (
-    <div className="flex justify-center text-lg">
-      <div className="flex basis-1/3 mt-52">
-        <input
-          type="text"
-          className="w-full border border-slate-300 py-3 pl-5 shadow-sm focus:outline-none focus:border-sky-500"
-          placeholder="생존자 닉네임"
-          onChange={nicknameOnchange}
-          onKeyUp={nicknameOnKeyUp}
-        />
-        <button
-          className="bg-sky-600 basis-20 text-white font-semibold"
-          onClick={() => searchNickname()}
-        >
-          검색
-        </button>
+    <>
+      <div className="flex justify-center mt-52">
+        <h1 className="text-[40px] font-bold text-white">ER-PROFILE</h1>
       </div>
-    </div>
+      <div className="flex justify-center mb-10">
+        <h2 className="text-xl">이터널리턴 전적검색</h2>
+      </div>
+      <div className="flex justify-center text-lg">
+        <div className="flex basis-[600px] mx-10">
+          <input
+            type="text"
+            className="w-full border border-slate-300 py-3 pl-5 shadow-sm focus:outline-none focus:border-sky-500"
+            placeholder="생존자 닉네임"
+            onChange={nicknameOnchange}
+            onKeyUp={nicknameOnKeyUp}
+          />
+          <button
+            className="bg-sky-600 basis-20 text-white font-semibold"
+            onClick={() => searchNickname()}
+          >
+            검색
+          </button>
+        </div>
+      </div>
+    </>
   )
 }
 

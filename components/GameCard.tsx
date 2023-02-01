@@ -125,41 +125,43 @@ export const GameCard = (props: GameCardProps) => {
   return (
     <>
       {playerCharaceter ? (
-        <div className="card w-full flex items-center gap-[20px] text-center">
-          <div className="basis-[50px]">
-            #{getGameRank(gameRank, matchingTeamMode)}
-          </div>
-          <div className="basis-[60px]">
-            <div>{matchingTeamModeMap[matchingTeamMode]}</div>
-            <div>{matchingModeMap[matchingMode]}</div>
-            <div>
-              <small>{`v0.${versionMajor}.${versionMinor}`}</small>
+        <div className="card p-3 md:p-6 w-full flex items-center gap-[10px] md:gap-[20px] text-center flex-wrap sm:flex-nowrap">
+          <div className="flex flex-col md:flex-row md:items-center md:basis-[100px] gap-[10px] shrink-0">
+            <div className="md:basis-[40px] md:text-left shrink-0">
+              #{getGameRank(gameRank, matchingTeamMode)}
+            </div>
+            <div className="md:basis-[60px] shrink-0">
+              <div>{matchingTeamModeMap[matchingTeamMode]}</div>
+              <div>{matchingModeMap[matchingMode]}</div>
+              <div>
+                <small>{`v0.${versionMajor}.${versionMinor}`}</small>
+              </div>
             </div>
           </div>
-          <div className="flex">
-            <Image
-              src={characterImgPath}
-              width={96}
-              height={126}
-              placeholder="blur"
-              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-              alt={playerCharaceter?.name}
-            />
-            <div className="flex flex-col self-end">
-              <div className="bg-slate-600 border-2 border-b-0 w-[32px] h-[32px]">
+          <div className="flex flex-col sm:flex-row">
+            <div className="relative w-[56px] h-[73px] sm:w-[76px] sm:h-[100px] md:w-[96px] md:h-[126px]">
+              <Image
+                src={characterImgPath}
+                layout="fill"
+                alt={playerCharaceter?.name}
+              />
+            </div>
+            <div className="flex sm:flex-col sm:self-end">
+              <div className="bg-slate-600 border-2 w-[28px] h-[28px] border-r-0 sm:w-[32px] sm:h-[32px] sm:border-b-0 sm:border-r-2 relative">
                 <Image
                   src={`/images/items/${masteryMap?.[bestWeapon]}.png`}
-                  width="32"
-                  height="32"
+                  layout="fill"
                   alt="무기 아이콘"
                 />
               </div>
-              <div className="bg-slate-600 border-2 w-[32px] h-[32px]">
-                <span className="align-middle">{characterLevel}</span>
+              <div className="bg-slate-600 border-2 w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] relative">
+                <span className="sm:align-middle text-sm">
+                  {characterLevel}
+                </span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col basis-[100px]">
+          <div className="flex flex-col basis-[100px] shrink-0">
             <div>
               <small>K / A / H</small>
             </div>
@@ -171,19 +173,19 @@ export const GameCard = (props: GameCardProps) => {
             secondSubTrait={secondSubTrait}
           />
           <Items items={equipmentItems!} stats={stats} />
-          <div className="flex flex-col basis-[100px]">
+          <div className="hidden lg:flex-col lg:basis-[100px] lg:flex">
             <div>
               <small>MMR</small>
             </div>
             <MMR mmrAfter={mmrAfter} mmrGain={mmrGain} />
           </div>
-          <div className="flex flex-col basis-[100px]">
+          <div className="hidden xl:flex-col xl:basis-[100px] xl:flex">
             <div>
               <small>루트 ID</small>
             </div>
             <div>{routeIdOfStart === 0 ? '-' : routeIdOfStart}</div>
           </div>
-          <div className="basis-[90px] leading-4">
+          <div className="hidden sm:flex sm:flex-col sm:basis-[90px] sm:leading-4 sm:shrink-0">
             <div>
               <small>{dayjs(startDtm).format('YY년 MM월 DD일')}</small>
               <small>{dayjs(startDtm).format('hh시 mm분')}</small>

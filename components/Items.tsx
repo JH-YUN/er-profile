@@ -15,6 +15,7 @@ const PERCENT_OPTIONS = [
   'critical',
   'lifesteal',
 ]
+
 export const Items = ({ items, stats }: ItemsProps) => {
   const createTooltip = (item: Item) => {
     const option = Object.entries(item.option).reduce((acc, cur) => {
@@ -52,18 +53,19 @@ export const Items = ({ items, stats }: ItemsProps) => {
   }
   return (
     <TooltipProvider>
-      <div className="grid grid-cols-3 gap-2 mx-[30px]">
+      <div className="grid grid-cols-6 gap-1 sm:grid-cols-3 sm:gap-2">
         {items.map((item) => (
           <TooltipWrapper key={item.code} html={createTooltip(item)}>
             <div
-              className={`border-2 border-${item.itemGrade.toLowerCase()}-border w-[74px] h-[42px] bg-gradient-to-b from-${item.itemGrade.toLowerCase()}-top to-${item.itemGrade.toLowerCase()}-bottom`}
+              className={`border-2 border-${item.itemGrade.toLowerCase()}-border relative bg-gradient-to-b from-${item.itemGrade.toLowerCase()}-top to-${item.itemGrade.toLowerCase()}-bottom
+                w-[53px] h-[30px] lg:w-[74px] lg:h-[42px]`}
             >
               <Image
                 src={`/images/items/${item.code}.png`}
-                width="70"
-                height="38"
+                layout="fill"
                 alt={item.name}
               />
+              {/* <img src={`/images/items/${item.code}.png`} alt={item.name} /> */}
             </div>
           </TooltipWrapper>
         ))}

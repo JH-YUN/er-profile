@@ -15,7 +15,7 @@ export const MMR = ({ mmrAfter, mmrGain }: MMRprops) => {
         {mmrGain}
       </>
     ) : (
-      <span>⁃</span>
+      <span> ⁃ </span>
     )
   return (
     <div>

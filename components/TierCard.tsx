@@ -83,64 +83,62 @@ const TierCard = (stats: TierCardProps) => {
       }}
     >
       <div className="card-contents">
-        <>
-          <div className="flex">
-            <div
-              className="mr-2"
-              style={{
-                backgroundColor: `rgb(var(--color-${tier}))`,
-                flex: `0 0 5px`,
-              }}
-            ></div>
-            <ul
-              className="text-white text-base font-bold"
-              style={{
-                backgroundImage: `#fff`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right',
-                backgroundSize: '1% 100%',
-              }}
+        <div className="flex">
+          <div
+            className="mr-2"
+            style={{
+              backgroundColor: `rgb(var(--color-${tier}))`,
+              flex: `0 0 5px`,
+            }}
+          ></div>
+          <ul
+            className="text-white text-base font-bold"
+            style={{
+              backgroundImage: `#fff`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right',
+              backgroundSize: '1% 100%',
+            }}
+          >
+            <h2
+              className="text-xl font-semibold leading-3 mb-5"
+              style={{ color: `rgb(var(--color-${tier})` }}
             >
-              <h2
-                className="text-xl font-semibold leading-3 mb-5"
-                style={{ color: `rgb(var(--color-${tier})` }}
-              >
-                {matchginMode(matchingTeamMode)}
-              </h2>
-              {mmr === 0 ? (
-                <li>UNRANKED</li>
-              ) : (
-                <>
-                  <li>
-                    {tier} {grade} {lp}LP
-                  </li>
-                  {/* <li>MMR : {mmr}</li> */}
-                  <li>
-                    {rank}위{' '}
-                    <span className="italic">
-                      (상위 {rankPercent(rank, rankSize)} %)
-                    </span>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
-          {mmr === 0 ? (
-            ''
-          ) : (
-            <ul className="mt-2 font-bold">
-              {showWinRate ? (
-                <li>승률: {winPercent(totalGames, totalWins)}%</li>
-              ) : (
-                ''
-              )}
-              {showTotalGames ? <li>게임 수: {totalGames}</li> : ''}
-              {showAverageRank ? <li>평균 순위: {averageRank}</li> : ''}
-              {showAverageKills ? <li>평균 킬: {averageKills}</li> : ''}
-              {showAverageHunts ? <li>평균 사냥: {averageHunts}</li> : ''}
-            </ul>
-          )}
-        </>
+              {matchginMode(matchingTeamMode)}
+            </h2>
+            {mmr === 0 ? (
+              <li>UNRANKED</li>
+            ) : (
+              <>
+                <li>
+                  {tier} {grade} {lp}LP
+                </li>
+                {/* <li>MMR : {mmr}</li> */}
+                <li>
+                  {rank}위{' '}
+                  <span className="italic">
+                    (상위 {rankPercent(rank, rankSize)} %)
+                  </span>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+        {mmr === 0 ? (
+          ''
+        ) : (
+          <ul className="mt-2 font-bold">
+            {showWinRate ? (
+              <li>승률: {winPercent(totalGames, totalWins)}%</li>
+            ) : (
+              ''
+            )}
+            {showTotalGames ? <li>게임 수: {totalGames}</li> : ''}
+            {showAverageRank ? <li>평균 순위: {averageRank}</li> : ''}
+            {showAverageKills ? <li>평균 킬: {averageKills}</li> : ''}
+            {showAverageHunts ? <li>평균 사냥: {averageHunts}</li> : ''}
+          </ul>
+        )}
       </div>
     </div>
   )
