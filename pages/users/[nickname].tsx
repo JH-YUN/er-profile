@@ -239,37 +239,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   // 시즌 리스트 가져오기
-  const getSeasons = () => {
-    return [
-      {
-        seasonID: 1,
-        seasonName: '시즌 1',
-      },
-      {
-        seasonID: 3,
-        seasonName: '시즌 2',
-      },
-      {
-        seasonID: 5,
-        seasonName: '시즌 3',
-      },
-      {
-        seasonID: 7,
-        seasonName: '시즌 4',
-      },
-      {
-        seasonID: 9,
-        seasonName: '시즌 5',
-      },
-      {
-        seasonID: 11,
-        seasonName: '시즌 6',
-      },
-      {
-        seasonID: 13,
-        seasonName: '시즌 7',
-      },
-    ]
+  // 프리 시즌이 현재 시즌일경우 제외하고 제거(데이터 없음)
+  // 일단 한글화
+  const getSeasons = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/seasons`)
+    const seasons = await res.json()
+
+    return seasons
+      .filter(
+        (season) =>
+          !season.seasonName.startsWith('Pre') || season.isCurrent === 1
+      )
+      .map((season) => ({
+        ...season,
+        ...{
+          seasonName: season.seasonName
+            .replace('Season', '시즌 ')
+            .replace('Pre-', '프리'),
+        },
+      }))
   }
 
   // 유저 정보 가져오기
@@ -305,7 +293,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { code, user } = await getUserNumber(
       context.params?.nickname as string
     )
-    const seasons = getSeasons()
+    const seasons = await getSeasons()
     let selectedSeason: string | undefined = context.query.season as string
     if (code === 404) {
       // TODO: 없는 닉네임 입력했을 경우 처리
@@ -318,7 +306,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       selectedSeason === undefined ||
       seasons.findIndex((el) => el.seasonID === Number(selectedSeason)) === -1
     ) {
-      selectedSeason = String(seasons.at(-1)?.seasonID)
+      selectedSeason = String(
+        seasons.find((season) => season.isCurrent === 1).seasonID
+      )
     }
     let { userStats } = await getUserStats(user.userNum, selectedSeason)
 
