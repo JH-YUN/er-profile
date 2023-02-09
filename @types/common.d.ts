@@ -117,7 +117,7 @@ interface TierCardProps {
   top1: number
   top2: number
   nickname: string
-  totalGames: string
+  totalGames: number
   totalWins: number
   averageRank: string
   averageKills: string

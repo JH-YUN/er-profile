@@ -101,7 +101,7 @@ const User = ({
       console.log(htmltoimage)
       const captureNode = document.getElementById('capture-area')
       htmltoimage
-        .toJpeg(captureNode)
+        .toJpeg(captureNode!)
         .then((dataUrl) => {
           const link = document.createElement('a')
           link.download = 'my-image-name.jpg'
@@ -243,7 +243,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // 일단 한글화
   const getSeasons = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/seasons`)
-    const seasons = await res.json()
+    const seasons: Array<{
+      seasonName: string
+      isCurrent: 0 | 1
+      seasonID: number
+    }> = await res.json()
 
     return seasons
       .filter(
@@ -307,7 +311,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       seasons.findIndex((el) => el.seasonID === Number(selectedSeason)) === -1
     ) {
       selectedSeason = String(
-        seasons.find((season) => season.isCurrent === 1).seasonID
+        seasons.find((season) => season.isCurrent === 1)!.seasonID
       )
     }
     let { userStats } = await getUserStats(user.userNum, selectedSeason)

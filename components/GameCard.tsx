@@ -61,7 +61,7 @@ export const GameCard = (props: GameCardProps) => {
   // 아이템
   const equipmentItems = Object.entries(equipment).map(([i, code]) =>
     items.find((item) => item.code === code)
-  )
+  ) as Array<Item>
   const matchingModeMap: { [key: number]: string } = {
     2: '일반',
     3: '랭크',
@@ -172,7 +172,7 @@ export const GameCard = (props: GameCardProps) => {
             firstSubTrait={firstSubTrait}
             secondSubTrait={secondSubTrait}
           />
-          <Items items={equipmentItems!} stats={stats} />
+          <Items items={equipmentItems} stats={stats} />
           <div className="hidden lg:flex-col lg:basis-[100px] lg:flex">
             <div>
               <small>MMR</small>
