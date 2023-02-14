@@ -12,7 +12,7 @@ export const MMR = ({ mmrAfter, mmrGain }: MMRprops) => {
     ) : mmrGain < 0 ? (
       <>
         &nbsp; <span className="text-blue-500">▼</span>
-        {mmrGain}
+        {Math.abs(mmrGain)}
       </>
     ) : (
       <span> ⁃ </span>
