@@ -1,25 +1,12 @@
 import { memo, useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useCharacterImage, ImageOption } from '../hooks/useCharacterImage'
+import { CharacterImage } from './CharacterImage'
 
 const getWinRate = (wins: number, total: number) => {
   return Math.round((wins / total) * 1000) / 10
 }
 
-const createSkinImageName = (
-  characterName: string,
-  skinIndex: number,
-  size: 'mini' | 'half' | 'full' = 'mini'
-) => {
-  const maxIndexLen = 3
-
-  return `${characterName}_S${String(skinIndex).padStart(
-    maxIndexLen,
-    '0'
-  )}_${size}`
-}
-
-const CharacterCard = ({
+export const CharacterCard = ({
   characterCode,
   totalGames,
   wins,
@@ -28,11 +15,7 @@ const CharacterCard = ({
   characterSkins,
 }: CharacterCardProps) => {
   const [selectedSkinIndex, setSelectedSkinIndex] = useState<number>(0)
-  const characterImagePath = useCharacterImage({
-    characterName: character?.resource,
-    skinIndex: selectedSkinIndex,
-    size: 'mini',
-  })
+
   const onChangeSkin = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const skinIndex = Number(e.target.value)
     setSelectedSkinIndex(skinIndex)
@@ -66,12 +49,11 @@ const CharacterCard = ({
             </select>
           </div>
           <div className="flex">
-            <div className="mr-5">
-              <Image
-                src={characterImagePath}
-                width={73.2}
-                height={96}
-                alt={character?.name}
+            <div className="mr-5 mb-2 w-[73px] h-[96px] relative">
+              <CharacterImage
+                characterName={character.resource}
+                skinIndex={selectedSkinIndex}
+                size="Mini"
               />
             </div>
             <ul className="text-white text-base font-bold self-center">

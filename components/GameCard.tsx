@@ -1,4 +1,3 @@
-import { useCharacterImage } from '../hooks/useCharacterImage'
 import Image from 'next/image'
 import { memo } from 'react'
 import { ChevronUpIcon } from '@heroicons/react/24/solid'
@@ -6,6 +5,7 @@ import { MMR } from './MMR'
 import dayjs from 'dayjs'
 import { Traits } from './Traits'
 import { Items } from './Items'
+import { CharacterImage } from './CharacterImage'
 
 export const GameCard = (props: GameCardProps) => {
   const {
@@ -47,11 +47,6 @@ export const GameCard = (props: GameCardProps) => {
   const playerCharaceter = characters.find(
     (character) => character.code === characterNum
   )
-  const characterImgPath = useCharacterImage({
-    characterName: playerCharaceter?.resource,
-    skinCode: skinCode,
-    size: 'mini',
-  })
 
   // 특성
   const firstCoreTrait = traits.find((el) => el.code === traitFirstCore)
@@ -140,10 +135,10 @@ export const GameCard = (props: GameCardProps) => {
           </div>
           <div className="flex flex-col sm:flex-row">
             <div className="relative w-[56px] h-[73px] sm:w-[76px] sm:h-[100px] md:w-[96px] md:h-[126px]">
-              <Image
-                src={characterImgPath}
-                layout="fill"
-                alt={playerCharaceter?.name}
+              <CharacterImage
+                characterName={playerCharaceter.resource}
+                skinCode={skinCode}
+                size="Mini"
               />
             </div>
             <div className="flex sm:flex-col sm:self-end">
