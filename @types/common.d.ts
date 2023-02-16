@@ -69,6 +69,7 @@ interface GameResult {
   monsterKill: number
   playerDeaths: number
   routeIdOfStart: number
+  escapeState: number
 }
 
 interface CharacterCardProps {

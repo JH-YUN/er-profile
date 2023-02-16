@@ -43,6 +43,7 @@ export const GameCard = (props: GameCardProps) => {
     playerDeaths,
     playTime,
     routeIdOfStart,
+    escapeState,
   } = props
   const playerCharaceter = characters.find(
     (character) => character.code === characterNum
@@ -67,9 +68,15 @@ export const GameCard = (props: GameCardProps) => {
     3: '스쿼드',
     4: '코발트',
   }
-  const getGameRank = (rank: number, matchingTeamMode: number) => {
+  const getGameRank = (
+    rank: number,
+    matchingTeamMode: number,
+    escapeState: number
+  ) => {
     if (matchingTeamMode === 4) {
       return rank === 1 ? '승리' : '패배'
+    } else if (escapeState !== 0) {
+      return escapeState === 3 ? '탈출성공' : '탈출실패'
     } else {
       return rank
     }
@@ -123,7 +130,7 @@ export const GameCard = (props: GameCardProps) => {
         <div className="card p-3 md:p-6 w-full flex items-center gap-[10px] md:gap-[20px] text-center flex-wrap sm:flex-nowrap">
           <div className="flex flex-col md:flex-row md:items-center md:basis-[100px] gap-[10px] shrink-0">
             <div className="md:basis-[40px] md:text-left shrink-0">
-              #{getGameRank(gameRank, matchingTeamMode)}
+              #{getGameRank(gameRank, matchingTeamMode, escapeState)}
             </div>
             <div className="md:basis-[60px] shrink-0">
               <div>{matchingTeamModeMap[matchingTeamMode]}</div>
