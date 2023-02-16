@@ -7,11 +7,12 @@ type Tiers =
   | 'gold'
   | 'platinum'
   | 'diamond'
+  | 'mithril'
   | 'demigod'
   | 'eternity'
 
 // mmr 점수를 티어로
-const mmrToTier = (mmr: number, rank: number) => {
+const mmrToTier = (mmr: number, rank: number, seasonId: number) => {
   const a = Math.trunc(mmr / 100)
   let lp = mmr % 100
   let grade: number | string = a % 4
@@ -25,10 +26,19 @@ const mmrToTier = (mmr: number, rank: number) => {
   else if (a < 24) tier = 'diamond'
   else if (a < 28) {
     grade = ''
-    if (lp > 200 && rank < 200) {
-      tier = 'eternity'
-      lp -= 200
-    } else tier = 'demigod'
+    // 시즌8부터 미스릴 티어 추가
+    if (seasonId >= 15) {
+      if (rank < 200) {
+        tier = 'eternity'
+      } else if (rank < 700) {
+        tier = 'demigod'
+      } else tier = 'mithril'
+    } else {
+      if (lp > 200 && rank < 200) {
+        tier = 'eternity'
+        lp -= 200
+      } else tier = 'demigod'
+    }
   }
 
   return { tier, grade, lp }
@@ -71,7 +81,7 @@ const TierCard = (stats: TierCardProps) => {
     showAverageKills,
     showAverageHunts,
   } = stats
-  const { tier, lp, grade } = mmrToTier(mmr, rank)
+  const { tier, lp, grade } = mmrToTier(mmr, rank, seasonId)
   return (
     <div
       className="card w-full min-h-[280px]"
