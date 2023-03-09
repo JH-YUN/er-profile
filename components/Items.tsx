@@ -4,7 +4,7 @@ import { Tooltip, TooltipWrapper, TooltipProvider } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
 interface ItemsProps {
-  items: Array<Item>
+  items: Array<Item | null>
   stats: Array<Stat>
 }
 // 퍼센트로 표기해야하는 옵션 리스트
@@ -54,21 +54,27 @@ export const Items = ({ items, stats }: ItemsProps) => {
   return (
     <TooltipProvider>
       <div className="grid grid-cols-6 gap-1 sm:grid-cols-3 sm:gap-2">
-        {items.map((item) => (
-          <TooltipWrapper key={item.code} html={createTooltip(item)}>
+        {items.map((item) =>
+          item === null ? (
             <div
-              className={`border-2 border-${item.itemGrade.toLowerCase()}-border relative bg-gradient-to-b from-${item.itemGrade.toLowerCase()}-top to-${item.itemGrade.toLowerCase()}-bottom
+              className={`border-2 border-common-border relative bg-common-top
+            w-[53px] h-[30px] lg:w-[74px] lg:h-[42px]`}
+            ></div>
+          ) : (
+            <TooltipWrapper key={item.code} html={createTooltip(item)}>
+              <div
+                className={`border-2 border-${item.itemGrade.toLowerCase()}-border relative bg-gradient-to-b from-${item.itemGrade.toLowerCase()}-top to-${item.itemGrade.toLowerCase()}-bottom
                 w-[53px] h-[30px] lg:w-[74px] lg:h-[42px]`}
-            >
-              <Image
-                src={`/images/items/${item.code}.png`}
-                layout="fill"
-                alt={item.name}
-              />
-              {/* <img src={`/images/items/${item.code}.png`} alt={item.name} /> */}
-            </div>
-          </TooltipWrapper>
-        ))}
+              >
+                <Image
+                  src={`/images/items/${item.code}.png`}
+                  layout="fill"
+                  alt={item.name}
+                />
+              </div>
+            </TooltipWrapper>
+          )
+        )}
       </div>
       <Tooltip className="tooltip" />
     </TooltipProvider>

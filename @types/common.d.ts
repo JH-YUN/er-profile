@@ -37,12 +37,12 @@ interface GameResult {
   bestWeapon: number
   bestWeaponLevel: number
   equipment: {
-    '0': number // 무기
-    '1': number // 옷
-    '2': number // 머리
-    '3': number // 팔
-    '4': number // 다리
-    '5': number // 장신구
+    '0'?: number // 무기
+    '1'?: number // 옷
+    '2'?: number // 머리
+    '3'?: number // 팔
+    '4'?: number // 다리
+    '5'?: number // 장신구
   }
   versionMajor: number
   versionMinor: number

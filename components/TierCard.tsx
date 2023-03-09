@@ -30,6 +30,7 @@ const mmrToTier = (mmr: number, rank: number, seasonId: number) => {
     if (seasonId >= 15) {
       if (rank < 200) {
         tier = 'eternity'
+        lp -= 200
       } else if (rank < 700) {
         tier = 'demigod'
       } else tier = 'mithril'

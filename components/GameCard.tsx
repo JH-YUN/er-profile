@@ -55,9 +55,23 @@ export const GameCard = (props: GameCardProps) => {
   const secondSubTrait = traits.filter((el) => traitSecondSub.includes(el.code))
 
   // 아이템
-  const equipmentItems = Object.entries(equipment).map(([i, code]) =>
-    items.find((item) => item.code === code)
-  ) as Array<Item>
+  const emptyEquipment = {
+    '0': null,
+    '1': null,
+    '2': null,
+    '3': null,
+    '4': null,
+    '5': null,
+  } as Equipment
+  const equipmentItems = { ...emptyEquipment, ...equipment }
+  const equipments: Array<Item | null> = Object.entries(equipmentItems).map(
+    ([itemType, itemCode], i) => {
+      // 빈칸의 경우 null
+      if (itemCode === null) return null
+      else return items.find((item) => item.code === itemCode) ?? null
+    }
+  )
+
   const matchingModeMap: { [key: number]: string } = {
     2: '일반',
     3: '랭크',
@@ -174,7 +188,7 @@ export const GameCard = (props: GameCardProps) => {
             firstSubTrait={firstSubTrait}
             secondSubTrait={secondSubTrait}
           />
-          <Items items={equipmentItems} stats={stats} />
+          <Items items={equipments} stats={stats} />
           <div className="hidden lg:flex-col lg:basis-[100px] lg:flex">
             <div>
               <small>MMR</small>
