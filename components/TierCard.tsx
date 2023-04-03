@@ -24,7 +24,8 @@ const mmrToTier = (mmr: number, rank: number, seasonId: number) => {
   else if (a < 16) tier = 'gold'
   else if (a < 20) tier = 'platinum'
   else if (a < 24) tier = 'diamond'
-  else if (a < 28) {
+  else {
+    lp = mmr - 2400
     grade = ''
     // 시즌8부터 미스릴 티어 추가
     if (seasonId >= 15) {
