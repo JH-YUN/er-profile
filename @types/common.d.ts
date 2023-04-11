@@ -1,5 +1,5 @@
 interface userProps {
-  error: object
+  error: string | boolean
   userStats: Array<any>
   seasons: Array<any>
   selectedSeason: string
@@ -8,6 +8,22 @@ interface userProps {
 interface SettingPopoverOption {
   name: string
   isOn: boolean
+}
+// 유저 프로필 스탯
+interface UserStats {
+  seasonId: number
+  matchingTeamMode: number
+  mmr: number
+  rank: number
+  rankSize: number
+  top1: number
+  top2: number
+  nickname: string
+  totalGames: number
+  totalWins: number
+  averageRank: string
+  averageKills: string
+  averageHunts: string
 }
 interface Character {
   code: number

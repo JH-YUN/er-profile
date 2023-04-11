@@ -1,17 +1,24 @@
 import { useEffect, useState } from 'react'
 import type { GetServerSideProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { Popover } from '@headlessui/react'
-import { TierCard, MemoTierCard } from '../../components/TierCard'
-import { MemoCharacterCard } from '../../components/CharacterCard'
-import { SettingPopover } from '../../components/SettingPopover'
+import Link from 'next/link'
+import { Profile } from '../../components/Profile'
 import { CameraIcon } from '@heroicons/react/20/solid'
 import * as htmltoimage from 'html-to-image'
 import { Games } from '../../components/Games'
-import { RssIcon } from '@heroicons/react/24/solid'
+import { HomeIcon } from '@heroicons/react/24/solid'
+import {
+  createErApiAxios,
+  createOfficialApiAxios,
+} from '../../util/customAxios'
+
+class NotFoundUserError extends Error {
+  constructor(msg: string, cause?: any) {
+    super(msg)
+    this.cause = cause
+    this.name = 'NotFoundUserError'
+  }
+}
 
 const User = ({
   error,
@@ -32,54 +39,47 @@ const User = ({
   const onChangeSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.replace(`/users/${router.query.nickname}?season=${e.target.value}`)
   }
+  const erApiAxios = createErApiAxios()
+  const officialApiAxios = createOfficialApiAxios()
 
   const getCharacters = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/characters`)
-    if (res.ok) {
-      setCharacters(await res.json())
-    }
+    const res = await erApiAxios(`/characters`)
+    setCharacters(res.data)
   }
   const getCharacterSkins = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_ER_API_URL}/character-skins`
-    )
-    if (res.ok) {
-      const skins = await res.json()
-      setCharacterSkins(skins)
-    }
+    const res = await erApiAxios(`/character-skins`)
+
+    const skins = res.data
+    setCharacterSkins(skins)
   }
   const getItems = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/items`)
-    if (res.ok) {
-      const items = await res.json()
-      setItems(items)
-    }
+    const res = await erApiAxios(`/items`)
+
+    const items = res.data
+    setItems(items)
   }
   const getTraits = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/traits`)
-    if (res.ok) {
-      const traits = await res.json()
-      setTraits(traits)
-    }
+    const res = await erApiAxios(`/traits`)
+
+    const traits = res.data
+    setTraits(traits)
   }
 
   const getStats = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/stats`)
-    if (res.ok) {
-      const stats = await res.json()
-      setStats(stats)
-    }
+    const res = await erApiAxios(`/stats`)
+
+    const stats = res.data
+    setStats(stats)
   }
 
-  const getRecentGames = async (next: number | string = '') => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/user-games/${userNum}?next=${next}`
+  const getRecentGames = async (nextGameId: number | string = '') => {
+    const res = await officialApiAxios(
+      `/user/games/${userNum}?next=${nextGameId}`
     )
-    if (res.ok) {
-      const { userGames, next } = await res.json()
-      setGameResults((prev) => [...prev, ...userGames])
-      setNextGameId(next)
-    }
+
+    const { userGames, next } = res.data
+    setGameResults((prev) => [...prev, ...userGames])
+    setNextGameId(next)
   }
 
   const getMoreGames = async () => {
@@ -87,12 +87,14 @@ const User = ({
   }
 
   useEffect(() => {
-    getCharacters()
-    getCharacterSkins()
-    getItems()
-    getRecentGames()
-    getTraits()
-    getStats()
+    if (!error) {
+      getCharacters()
+      getCharacterSkins()
+      getItems()
+      getRecentGames()
+      getTraits()
+      getStats()
+    }
   }, [])
 
   // 캡쳐 버튼 클릭시 캡쳐
@@ -115,18 +117,19 @@ const User = ({
     }
   }
 
-  const [showMode, setShowMode] = useState<Array<number>>([1, 2, 3])
-  const [showWinRate, setShowWinRate] = useState(true)
-  const [showTotalGames, setShowTotalGames] = useState(true)
-  const [showAverageRank, setShowAverageRank] = useState(true)
-  const [showAverageKills, setShowAverageKills] = useState(true)
-  const [showAverageHunts, setShowAverageHunts] = useState(true)
-
+  if (error && error === 'NotFoundUserError') return <>존재하지 않는 유저</>
+  else if (error) return <>{'에러'}</>
   return (
     <>
       <div className="container">
         <div className="card flex mb-5 justify-between">
-          <h1 className="text-2xl font-bold">{`${router.query.nickname}의 프로필`}</h1>
+          <Link href="/">
+            <HomeIcon
+              className="h-8 w-8 text-slate-100 transition duration-150 ease-in-out group-hover:text-opacity-80 cursor-pointer"
+              aria-hidden="true"
+            />
+          </Link>
+          <h1 className="text-2xl font-bold">{`${router.query.nickname}`}</h1>
           <div className="flex gap-3">
             <select defaultValue={selectedSeason} onChange={onChangeSeason}>
               {seasons.map((season) => (
@@ -135,20 +138,6 @@ const User = ({
                 </option>
               ))}
             </select>
-            <SettingPopover
-              showMode={showMode}
-              showWinRate={showWinRate}
-              showTotalGames={showTotalGames}
-              showAverageRank={showAverageRank}
-              showAverageKills={showAverageKills}
-              showAverageHunts={showAverageHunts}
-              setShowMode={setShowMode}
-              setShowWinRate={setShowWinRate}
-              setShowTotalGames={setShowTotalGames}
-              setShowAverageRank={setShowAverageRank}
-              setShowAverageKills={setShowAverageKills}
-              setShowAverageHunts={setShowAverageHunts}
-            />
             <button>
               <CameraIcon
                 onClick={onClickCaputre}
@@ -158,45 +147,11 @@ const User = ({
             </button>
           </div>
         </div>
-        <div
-          id="capture-area"
-          className="flex flex-col w-full items-center lg:flex-row lg:items-start gap-10  mb-3"
-        >
-          {userStats.map((stats: any) => (
-            <>
-              {
-                <div
-                  className={`${
-                    !showMode.includes(stats.matchingTeamMode) ? 'hidden' : ''
-                  } flex flex-col w-full`}
-                  key={stats.matchingTeamMode}
-                >
-                  <MemoTierCard
-                    key={stats.matchingTeamMode}
-                    {...stats}
-                    showWinRate={showWinRate}
-                    showTotalGames={showTotalGames}
-                    showAverageRank={showAverageRank}
-                    showAverageKills={showAverageKills}
-                    showAverageHunts={showAverageHunts}
-                  />
-                  {stats.characterStats?.map((characterStat: any) => (
-                    <MemoCharacterCard
-                      key={characterStat.characterCode}
-                      {...characterStat}
-                      character={characters.find(
-                        (el) => el.code === characterStat.characterCode
-                      )}
-                      characterSkins={characterSkins.filter(
-                        (el) => el.characterCode === characterStat.characterCode
-                      )}
-                    />
-                  ))}
-                </div>
-              }
-            </>
-          ))}
-        </div>
+        <Profile
+          userStats={userStats}
+          characters={characters}
+          characterSkins={characterSkins}
+        />
         <Games
           gameResults={gameResults}
           getMoreGames={getMoreGames}
@@ -213,41 +168,29 @@ const User = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // 유저 번호 가져오기
   const getUserNumber = async (nickname: string) => {
-    const config = {
-      method: 'GET',
-      headers: {
-        'x-api-key': process.env.API_KEY,
-        Accept: 'application/json',
-      },
-    }
-    try {
-      const response = await fetch(
-        `${process.env.API_URL}/v1/user/nickname?${new URLSearchParams({
-          query: nickname,
-        })}`,
-        config as RequestInit
-      )
-      if (response.ok) {
-        return await response.json()
-      } else {
-        throw new Error(`get userNum error: ${response.statusText}`)
-      }
-    } catch (e) {
-      console.error(e)
-      throw new Error()
-    }
+    // 공식 api 요청용 axios
+    const officialApiAxios = createOfficialApiAxios()
+
+    const response = await officialApiAxios.get(
+      `/user/nickname?${new URLSearchParams({
+        query: nickname,
+      })}`
+    )
+
+    return response.data
   }
 
   // 시즌 리스트 가져오기
   // 프리 시즌이 현재 시즌일경우 제외하고 제거(데이터 없음)
   // 일단 한글화
   const getSeasons = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ER_API_URL}/seasons`)
+    const erApiAxios = createErApiAxios()
+    const response = await erApiAxios(`/seasons`)
     const seasons: Array<{
       seasonName: string
       isCurrent: 0 | 1
       seasonID: number
-    }> = await res.json()
+    }> = response.data
 
     return seasons
       .filter(
@@ -269,43 +212,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     userNum: string | number,
     seasonId: string | number
   ) => {
-    const config = {
-      method: 'GET',
-      headers: {
-        'x-api-key': process.env.API_KEY,
-        Accept: 'application/json',
-      },
-    }
+    // 공식 api 요청용 axios
+    const officialApiAxios = createOfficialApiAxios()
+    const response = await officialApiAxios(
+      `/user/stats/${userNum}/${seasonId}`
+    )
 
-    try {
-      const response = await fetch(
-        `${process.env.API_URL}/v1/user/stats/${userNum}/${seasonId}`,
-        config as RequestInit
-      )
-      if (response.ok) {
-        return await response.json()
-      } else {
-        throw new Error(`stats error: ${response.statusText}`)
-      }
-    } catch (e) {
-      console.error(e)
-      throw new Error()
+    if (response.data.code === 404) {
+      response.data.userStats = []
     }
+    return response.data
   }
 
   try {
     const { code, user } = await getUserNumber(
       context.params?.nickname as string
     )
+    if (code === 404) {
+      console.log('404 에러 발생')
+      throw new NotFoundUserError('존재하지 않는 닉네임')
+    }
+
     const seasons = await getSeasons()
     let selectedSeason: string | undefined = context.query.season as string
-    if (code === 404) {
-      // TODO: 없는 닉네임 입력했을 경우 처리
-      console.log('404')
-    } else if (code === 429) {
-      //TODO: api 요청량 초과 처리
-      console.log('429')
-    }
     if (
       selectedSeason === undefined ||
       seasons.findIndex((el) => el.seasonID === Number(selectedSeason)) === -1
@@ -346,12 +275,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   } catch (err) {
-    console.error(err)
-
-    return {
-      props: {
-        error: true,
-      },
+    console.log(err)
+    if (err instanceof NotFoundUserError) {
+      return {
+        props: {
+          error: err.name,
+        },
+      }
+    } else {
+      return {
+        props: {
+          error: true,
+        },
+      }
     }
   }
 }

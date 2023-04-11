@@ -77,11 +77,6 @@ const TierCard = (stats: TierCardProps) => {
     averageRank,
     averageKills,
     averageHunts,
-    showWinRate,
-    showTotalGames,
-    showAverageRank,
-    showAverageKills,
-    showAverageHunts,
   } = stats
   const { tier, lp, grade } = mmrToTier(mmr, rank, seasonId)
   return (
@@ -140,15 +135,11 @@ const TierCard = (stats: TierCardProps) => {
           ''
         ) : (
           <ul className="mt-2 font-bold">
-            {showWinRate ? (
-              <li>승률: {winPercent(totalGames, totalWins)}%</li>
-            ) : (
-              ''
-            )}
-            {showTotalGames ? <li>게임 수: {totalGames}</li> : ''}
-            {showAverageRank ? <li>평균 순위: {averageRank}</li> : ''}
-            {showAverageKills ? <li>평균 킬: {averageKills}</li> : ''}
-            {showAverageHunts ? <li>평균 사냥: {averageHunts}</li> : ''}
+            <li>승률: {winPercent(totalGames, totalWins)}%</li>
+            <li>게임 수: {totalGames}</li>
+            <li>평균 순위: {averageRank}</li>
+            <li>평균 킬: {averageKills}</li>
+            <li>평균 사냥: {averageHunts}</li>
           </ul>
         )}
       </div>
