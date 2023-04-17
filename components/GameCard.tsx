@@ -6,13 +6,11 @@ import dayjs from 'dayjs'
 import { Traits } from './Traits'
 import { Items } from './Items'
 import { CharacterImage } from './CharacterImage'
+import { useQueries } from '@tanstack/react-query'
+import axios, { AxiosResponse } from 'axios'
 
 export const GameCard = (props: GameCardProps) => {
   const {
-    characters,
-    traits,
-    items,
-    stats,
     characterNum,
     characterLevel,
     gameRank,
@@ -45,14 +43,60 @@ export const GameCard = (props: GameCardProps) => {
     routeIdOfStart,
     escapeState,
   } = props
-  const playerCharaceter = characters.find(
+  const [characters, characterSkins, items, traits] = useQueries({
+    queries: [
+      {
+        queryKey: ['characters'],
+        queryFn: async (): Promise<Array<Character>> => {
+          const { data } = await axios(
+            `${process.env.NEXT_PUBLIC_ER_API_URL}/characters`
+          )
+          return data
+        },
+      },
+      {
+        queryKey: ['characterSkins'],
+        queryFn: async (): Promise<Array<CharacterSkin>> => {
+          const { data } = await axios(
+            `${process.env.NEXT_PUBLIC_ER_API_URL}/character-skins`
+          )
+
+          return data
+        },
+      },
+      {
+        queryKey: ['items'],
+        queryFn: async (): Promise<Array<Item>> => {
+          const { data } = await axios(
+            `${process.env.NEXT_PUBLIC_ER_API_URL}/items`
+          )
+
+          return data
+        },
+      },
+      {
+        queryKey: ['traits'],
+        queryFn: async (): Promise<Array<Trait>> => {
+          const { data } = await axios(
+            `${process.env.NEXT_PUBLIC_ER_API_URL}/traits`
+          )
+
+          return data
+        },
+      },
+    ],
+  })
+
+  const playerCharaceter = characters.data?.find(
     (character) => character.code === characterNum
   )
 
   // 특성
-  const firstCoreTrait = traits.find((el) => el.code === traitFirstCore)
-  const firstSubTrait = traits.filter((el) => traitFirstSub.includes(el.code))
-  const secondSubTrait = traits.filter((el) => traitSecondSub.includes(el.code))
+  const firstCoreTrait = traits?.data?.find((el) => el.code === traitFirstCore)
+  const firstSubTrait =
+    traits?.data?.filter((el) => traitFirstSub.includes(el.code)) ?? []
+  const secondSubTrait =
+    traits?.data?.filter((el) => traitSecondSub.includes(el.code)) ?? []
 
   // 아이템
   const emptyEquipment = {
@@ -68,7 +112,7 @@ export const GameCard = (props: GameCardProps) => {
     ([itemType, itemCode], i) => {
       // 빈칸의 경우 null
       if (itemCode === null) return null
-      else return items.find((item) => item.code === itemCode) ?? null
+      else return items.data?.find((item) => item.code === itemCode) ?? null
     }
   )
 
@@ -138,6 +182,9 @@ export const GameCard = (props: GameCardProps) => {
     203: '명상',
     204: '사냥',
   }
+  if (characters.isLoading || characterSkins.isLoading || traits.isLoading) {
+    return <></>
+  }
   return (
     <>
       {playerCharaceter ? (
@@ -188,7 +235,7 @@ export const GameCard = (props: GameCardProps) => {
             firstSubTrait={firstSubTrait}
             secondSubTrait={secondSubTrait}
           />
-          <Items items={equipments} stats={stats} />
+          <Items items={equipments} />
           <div className="hidden lg:flex-col lg:basis-[100px] lg:flex">
             <div>
               <small>MMR</small>

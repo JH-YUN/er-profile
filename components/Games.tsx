@@ -1,13 +1,6 @@
 import { GameCard, MemoGameCard } from './GameCard'
 
-export const Games = ({
-  gameResults,
-  getMoreGames,
-  characters,
-  traits,
-  items,
-  stats,
-}: GamesProps) => {
+export const Games = ({ gameResults, getMoreGames }: GamesProps) => {
   const handleMoreGames = () => {
     getMoreGames()
   }
@@ -20,13 +13,7 @@ export const Games = ({
       </div>
       {gameResults.map((game, i) => (
         <div className="mb-1" key={game.gameId}>
-          <MemoGameCard
-            {...game}
-            characters={characters}
-            traits={traits}
-            items={items}
-            stats={stats}
-          />
+          <MemoGameCard {...game} />
         </div>
       ))}
 

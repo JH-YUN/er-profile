@@ -89,12 +89,11 @@ interface GameResult {
 }
 
 interface CharacterCardProps {
-  characterCode: number
   totalGames?: number
   wins?: number
   top3?: number
   character: Character
-  characterSkins: Array<CharacterSkin>
+  selectedCharacterSkins: Array<CharacterSkin>
 }
 interface Character {
   code: number
@@ -113,17 +112,8 @@ interface CharacterSkin {
 interface GamesProps {
   gameResults: Array<GameResult>
   getMoreGames: Function
-  characters: Characters<Character>
-  traits: Array<Trait>
-  items: Array<Item>
-  stats: Array<Stat>
 }
-interface GameCardProps extends GameResult {
-  characters: Array<Character>
-  traits: Array<Trait>
-  items: Array<Item>
-  stats: Array<Stat>
-}
+interface GameCardProps extends GameResult {}
 
 interface TierCardProps {
   seasonId: number

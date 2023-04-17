@@ -7,6 +7,8 @@ import { CameraIcon } from '@heroicons/react/20/solid'
 import * as htmltoimage from 'html-to-image'
 import { Games } from '../../components/Games'
 import { HomeIcon } from '@heroicons/react/24/solid'
+import { useQueries } from '@tanstack/react-query'
+import axios, { AxiosResponse } from 'axios'
 import {
   createErApiAxios,
   createOfficialApiAxios,
@@ -28,11 +30,6 @@ const User = ({
   userNum,
 }: userProps) => {
   const router = useRouter()
-  const [characters, setCharacters] = useState<Array<Character>>([])
-  const [characterSkins, setCharacterSkins] = useState<Array<CharacterSkin>>([])
-  const [items, setItems] = useState<Array<Item>>([])
-  const [traits, setTraits] = useState<Array<Trait>>([])
-  const [stats, setStats] = useState<Array<Stat>>([])
   const [gameResults, setGameResults] = useState<Array<GameResult>>([])
   const [nextGameId, setNextGameId] = useState<number>()
 
@@ -41,36 +38,6 @@ const User = ({
   }
   const erApiAxios = createErApiAxios()
   const officialApiAxios = createOfficialApiAxios()
-
-  const getCharacters = async () => {
-    const res = await erApiAxios(`/characters`)
-    setCharacters(res.data)
-  }
-  const getCharacterSkins = async () => {
-    const res = await erApiAxios(`/character-skins`)
-
-    const skins = res.data
-    setCharacterSkins(skins)
-  }
-  const getItems = async () => {
-    const res = await erApiAxios(`/items`)
-
-    const items = res.data
-    setItems(items)
-  }
-  const getTraits = async () => {
-    const res = await erApiAxios(`/traits`)
-
-    const traits = res.data
-    setTraits(traits)
-  }
-
-  const getStats = async () => {
-    const res = await erApiAxios(`/stats`)
-
-    const stats = res.data
-    setStats(stats)
-  }
 
   const getRecentGames = async (nextGameId: number | string = '') => {
     const res = await officialApiAxios(
@@ -88,12 +55,7 @@ const User = ({
 
   useEffect(() => {
     if (!error) {
-      getCharacters()
-      getCharacterSkins()
-      getItems()
       getRecentGames()
-      getTraits()
-      getStats()
     }
   }, [])
 
@@ -147,19 +109,8 @@ const User = ({
             </button>
           </div>
         </div>
-        <Profile
-          userStats={userStats}
-          characters={characters}
-          characterSkins={characterSkins}
-        />
-        <Games
-          gameResults={gameResults}
-          getMoreGames={getMoreGames}
-          characters={characters}
-          traits={traits}
-          items={items}
-          stats={stats}
-        />
+        <Profile userStats={userStats} />
+        <Games gameResults={gameResults} getMoreGames={getMoreGames} />
       </div>
     </>
   )

@@ -1,18 +1,18 @@
-import { memo, useEffect, useState } from 'react'
-import Image from 'next/image'
+import { memo, useState } from 'react'
 import { CharacterImage } from './CharacterImage'
+import { useQueries } from '@tanstack/react-query'
+import axios from 'axios'
 
 const getWinRate = (wins: number, total: number) => {
   return Math.round((wins / total) * 1000) / 10
 }
 
 export const CharacterCard = ({
-  characterCode,
   totalGames,
   wins,
   top3,
   character,
-  characterSkins,
+  selectedCharacterSkins,
 }: CharacterCardProps) => {
   const [selectedSkinIndex, setSelectedSkinIndex] = useState<number>(0)
 
@@ -41,7 +41,7 @@ export const CharacterCard = ({
         <div className="card mt-2 py-2 px-4">
           <div className="text-right mb-2">
             <select className="w-[100px]" onChange={onChangeSkin}>
-              {characterSkins.map((skin) => (
+              {selectedCharacterSkins?.map((skin) => (
                 <option key={skin.code} value={skin.index}>
                   {skin.index === 0 ? '기본 스킨' : skin.name}
                 </option>

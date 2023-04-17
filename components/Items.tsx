@@ -2,10 +2,10 @@ import Image from 'next/image'
 import { useCallback } from 'react'
 import { Tooltip, TooltipWrapper, TooltipProvider } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
-
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 interface ItemsProps {
   items: Array<Item | null>
-  stats: Array<Stat>
 }
 // 퍼센트로 표기해야하는 옵션 리스트
 const PERCENT_OPTIONS = [
@@ -16,10 +16,20 @@ const PERCENT_OPTIONS = [
   'lifesteal',
 ]
 
-export const Items = ({ items, stats }: ItemsProps) => {
-  const createTooltip = (item: Item) => {
+export const Items = ({ items }: ItemsProps) => {
+  const { data, isLoading } = useQuery(
+    ['stats'],
+    async (): Promise<Array<Stat>> => {
+      const { data } = await axios(
+        `${process.env.NEXT_PUBLIC_ER_API_URL}/stats`
+      )
+
+      return data
+    }
+  )
+  const createTooltip = useCallback((item: Item, stats: Array<Stat>) => {
     const option = Object.entries(item.option).reduce((acc, cur) => {
-      const stat = stats.find((el) => el.id === cur[0])
+      const stat = stats?.find((el) => el.id === cur[0])
       const surfix =
         PERCENT_OPTIONS.findIndex((el) =>
           stat?.id.toLowerCase().includes(el)
@@ -50,6 +60,10 @@ export const Items = ({ items, stats }: ItemsProps) => {
       ${skill}
     `
     return tooltip
+  }, [])
+
+  if (isLoading) {
+    return <></>
   }
   return (
     <TooltipProvider>
@@ -61,7 +75,7 @@ export const Items = ({ items, stats }: ItemsProps) => {
             w-[53px] h-[30px] lg:w-[74px] lg:h-[42px]`}
             ></div>
           ) : (
-            <TooltipWrapper key={item.code} html={createTooltip(item)}>
+            <TooltipWrapper key={item.code} html={createTooltip(item, data)}>
               <div
                 className={`border-2 border-${item.itemGrade.toLowerCase()}-border relative bg-gradient-to-b from-${item.itemGrade.toLowerCase()}-top to-${item.itemGrade.toLowerCase()}-bottom
                 w-[53px] h-[30px] lg:w-[74px] lg:h-[42px]`}
