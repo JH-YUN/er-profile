@@ -36,46 +36,26 @@ const TierCard = (stats: TierCardProps) => {
   const { tier, lp, grade } = mmrToTier(mmr, rank, seasonId)
   return (
     <div
-      className="card w-full min-h-[280px]"
-      style={{
-        backgroundImage: `url('/images/tiers/${tier}.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, rgb(var(--color-${tier})))`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'right 20%, top right',
-        backgroundSize: '40%, 100% 48% ',
-      }}
+      className={`card w-full min-h-[280px] tier-card-${tier.toLowerCase()}`}
     >
       <div className="card-contents">
         <div className="flex">
           <div
-            className="mr-2"
-            style={{
-              backgroundColor: `rgb(var(--color-${tier}))`,
-              flex: `0 0 5px`,
-            }}
+            className={`mr-2 flex-shrink-0 flex-grow-0 basis-[5px] bg-${tier.toLowerCase()}`}
           ></div>
-          <ul
-            className="text-white text-base font-bold"
-            style={{
-              backgroundImage: `#fff`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'right',
-              backgroundSize: '1% 100%',
-            }}
-          >
+          <ul className="text-white text-base font-bold">
             <h2
-              className="text-xl font-semibold leading-3 mb-5"
-              style={{ color: `rgb(var(--color-${tier})` }}
+              className={`text-xl font-semibold leading-3 mb-5 ${`text-${tier.toLowerCase()}`}`}
             >
               {matchginMode(matchingTeamMode)}
             </h2>
             {mmr === 0 ? (
-              <li>UNRANKED</li>
+              <li>전적이 없습니다.</li>
             ) : (
               <>
                 <li>
                   {tier} {grade} {lp}LP
                 </li>
-                {/* <li>MMR : {mmr}</li> */}
                 <li>
                   {rank}위{' '}
                   <span className="italic">

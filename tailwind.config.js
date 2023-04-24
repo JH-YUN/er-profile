@@ -8,6 +8,10 @@ module.exports = {
     {
       pattern: /(common|uncommon|rare|epic|legend|mythic)-(bottom|top|border)/,
     },
+    {
+      pattern:
+        /(unrank|iron|bronze|silver|gold|platinum|diamond|mithril|demigod|eternity)/,
+    },
   ],
   theme: {
     screens: {
@@ -18,6 +22,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        // 아이템 등급 컬러
         common: {
           bottom: '#5b5e60',
           top: '#252626',
@@ -48,6 +53,17 @@ module.exports = {
           top: '#3d2120',
           border: '#a25756',
         },
+        // 티어 컬러
+        unrank: 'var(--color-unrank)',
+        iron: 'var(--color-iron)',
+        bronze: 'var(--color-bronze)',
+        silver: 'var(--color-silver)',
+        gold: 'var(--color-gold)',
+        platinum: 'var(--color-platinum)',
+        diamond: 'var(--color-diamond)',
+        mithril: 'var(--color-mithril)',
+        demigod: 'var(--color-demigod)',
+        eternity: 'var(--color-eternity)',
       },
     },
   },

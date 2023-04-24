@@ -11,12 +11,54 @@
     color: #9da3a9;
   }
 
-  .card-title {}
-
-  .card-contents {}
-
   .container {
     margin: 0 auto;
+  }
+
+  .tier-card-common {
+    background-repeat: no-repeat;
+    background-position: right 20%, top right;
+    background-size: 40%, 100% 48%;
+  }
+  .tier-card-eternity {
+    background-image:url('/images/tiers/eternity.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-eternity));
+    @apply tier-card-common
+  }
+  .tier-card-demigod {
+    background-image:url('/images/tiers/demigod.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-demigod));
+    @apply tier-card-common
+  }
+  .tier-card-mithril {
+    background-image:url('/images/tiers/mithril.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-mithril));
+    @apply tier-card-common
+  }
+  .tier-card-diamond {
+    background-image:url('/images/tiers/diamond.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-diamond));
+    @apply tier-card-common
+  }
+  .tier-card-platinum {
+    background-image:url('/images/tiers/platinum.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-platinum));
+    @apply tier-card-common
+  }
+  .tier-card-gold {
+    background-image:url('/images/tiers/gold.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-gold));
+    @apply tier-card-common
+  }
+  .tier-card-silver {
+    background-image:url('/images/tiers/silver.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-silver));
+    @apply tier-card-common
+  }
+  .tier-card-bronze {
+    background-image:url('/images/tiers/bronze.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-bronze));
+    @apply tier-card-common
+  }
+  .tier-card-iron {
+    background-image:url('/images/tiers/iron.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-iron));
+    @apply tier-card-common
+  }
+  .tier-card-unrank {
+    background-image:url('/images/tiers/unrank.png'), linear-gradient(90deg,  rgb(26, 27, 30) 15%, var(--color-unrank));
+    @apply tier-card-common
   }
 
 }
@@ -30,22 +72,23 @@
 
 @layer base {
   body {
-    background-color: #373737;
+    background-color: var(--color-gray);
   }
 
   :root {
+    /* 배경 컬러 */
+    --color-gray: #373737;
     /* 티어 컬러 */
-    --color-unrank: 129 134 145;
-    --color-iron: 78 84 88;
-    --color-bronze: 172 91 43;
-    --color-silver: 231 234 244;
-    --color-gold: 255 232 140;
-    --color-platinum: 78 168 181;
-    --color-diamond: 216 199 222;
-    --color-demigod: 226 231 203;
-    --color-mithril: 43 69 114;
-
-    --color-eternity: 205 49 107;
+    --color-unrank: #818691;
+    --color-iron: #4e5458;
+    --color-bronze: #ac5a2b;
+    --color-silver: #e7eaf4;
+    --color-gold: #ffe88c;
+    --color-platinum: #4ea7b5;
+    --color-diamond: #d8c7de;
+    --color-mithril: #2b4572;
+    --color-demigod: #e2e7cb;
+    --color-eternity: #cd316a;
 
     /* 아이템 컬러 */
     --color-common-bottom: #5b5e60;
