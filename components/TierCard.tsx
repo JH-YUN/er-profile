@@ -1,50 +1,5 @@
 import { memo } from 'react'
-
-type Tiers =
-  | 'iron'
-  | 'bronze'
-  | 'silver'
-  | 'gold'
-  | 'platinum'
-  | 'diamond'
-  | 'mithril'
-  | 'demigod'
-  | 'eternity'
-
-// mmr 점수를 티어로
-const mmrToTier = (mmr: number, rank: number, seasonId: number) => {
-  const a = Math.trunc(mmr / 100)
-  let lp = mmr % 100
-  let grade: number | string = a % 4
-  let tier
-  if (a === 0) tier = 'unrank'
-  else if (a < 4) tier = 'iron'
-  else if (a < 8) tier = 'bronze'
-  else if (a < 12) tier = 'silver'
-  else if (a < 16) tier = 'gold'
-  else if (a < 20) tier = 'platinum'
-  else if (a < 24) tier = 'diamond'
-  else {
-    lp = mmr - 2400
-    grade = ''
-    // 시즌8부터 미스릴 티어 추가
-    if (seasonId >= 15) {
-      if (rank < 200) {
-        tier = 'eternity'
-        lp -= 200
-      } else if (rank < 700) {
-        tier = 'demigod'
-      } else tier = 'mithril'
-    } else {
-      if (lp > 200 && rank < 200) {
-        tier = 'eternity'
-        lp -= 200
-      } else tier = 'demigod'
-    }
-  }
-
-  return { tier, grade, lp }
-}
+import { mmrToTier } from '../util'
 
 // 게임 팀 모드
 const matchginMode = (matchingTeamMode: number) => {
