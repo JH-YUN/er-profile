@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { mmrToTier } from '../util'
+import { mmrToTier } from '../util/mmrToTier'
 
 // 게임 팀 모드
 const matchginMode = (matchingTeamMode: number) => {

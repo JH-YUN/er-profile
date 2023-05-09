@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { mmrToTier } from '../util'
+import { mmrToTier } from '../util/mmrToTier'
 interface RankingProps {
   gameMode: 'solo' | 'duo' | 'squard'
   count?: number

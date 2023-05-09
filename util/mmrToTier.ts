@@ -8,7 +8,7 @@
 export const mmrToTier = (mmr: number, rank: number, seasonId?: number) => {
   const a = Math.trunc(mmr / 100)
   let lp = mmr % 100
-  let grade: number | string = a % 4
+  let grade: number | string = 4 - (a % 4)
   let tier
   if (a === 0) tier = 'Unrank'
   else if (a < 4) tier = 'Iron'
