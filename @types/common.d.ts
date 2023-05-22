@@ -161,7 +161,6 @@ interface Item {
   modeType: number
   weaponType?: string
   armorType?: string
-  desc: string
 }
 interface ItemSkill {
   code: number
