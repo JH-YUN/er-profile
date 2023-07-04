@@ -106,7 +106,7 @@ export const GameCard = (props: GameCardProps) => {
     '3': null,
     '4': null,
     '5': null,
-  } as Equipment
+  }
   const equipmentItems = { ...emptyEquipment, ...equipment }
   const equipments: Array<Item | null> = Object.entries(equipmentItems).map(
     ([itemType, itemCode], i) => {
