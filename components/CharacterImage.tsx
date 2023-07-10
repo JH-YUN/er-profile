@@ -24,10 +24,8 @@ export const CharacterImage = (props: CharacterImageProps) => {
         '0'
       )}_${size}.png`}
       fallbackSrc={`/images/characters/${characterName}_S000_${size}.png`}
-      width={width}
-      height={height}
-      layout="fill"
-      alt={characterName}
+      fill={true}
+      alt={characterName as string}
     />
   )
 }

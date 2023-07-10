@@ -5,7 +5,7 @@ interface ImageFallbackProps extends ImageProps {
   fallbackSrc: string
 }
 export const ImageFallback = (props: ImageFallbackProps) => {
-  const { src, fallbackSrc, ...options } = props
+  const { src, fallbackSrc, alt, ...options } = props
 
   const [imgSrc, setImgSrc] = useState(src)
   useEffect(() => {
@@ -19,6 +19,7 @@ export const ImageFallback = (props: ImageFallbackProps) => {
       onError={() => {
         setImgSrc(fallbackSrc)
       }}
+      alt={alt}
     />
   )
 }

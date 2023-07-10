@@ -28,8 +28,9 @@ export const Trait = ({ trait, size }: TraitProps) => {
       >
         <Image
           src={`/images/traits/${trait.code}.png`}
-          layout="fill"
           alt={trait.name}
+          fill
+          sizes="100vw"
         />
       </div>
     </Tooltip>

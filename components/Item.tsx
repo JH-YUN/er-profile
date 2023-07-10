@@ -104,8 +104,9 @@ export const Item = ({ item }: ItemProps) => {
       >
         <Image
           src={`/images/items/${item.code}.png`}
-          layout="fill"
           alt={item.name}
+          fill
+          sizes="100vw"
         />
       </div>
     </Tooltip>

@@ -213,8 +213,9 @@ export const GameCard = (props: GameCardProps) => {
               <div className="bg-slate-600 border-2 w-[28px] h-[28px] border-r-0 sm:w-[32px] sm:h-[32px] sm:border-b-0 sm:border-r-2 relative">
                 <Image
                   src={`/images/items/${masteryMap?.[bestWeapon]}.png`}
-                  layout="fill"
                   alt="무기 아이콘"
+                  fill
+                  sizes="100vw"
                 />
               </div>
               <div className="bg-slate-600 border-2 w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] relative">
