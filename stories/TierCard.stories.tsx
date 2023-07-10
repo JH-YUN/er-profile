@@ -24,7 +24,6 @@ type Story = StoryObj<typeof TierCard>
 export const UnrankTier: Story = {
   args: {
     seasonId: 9,
-    matchingMode: 3,
     matchingTeamMode: 2,
     mmr: 2405,
     nickname: '투끼',
@@ -32,15 +31,9 @@ export const UnrankTier: Story = {
     rankSize: 50038,
     totalGames: 98,
     totalWins: 17,
-    totalTeamKills: 345,
-    rankPercent: 0.03,
     averageRank: '4.83',
     averageKills: '1.64',
     averageHunts: '15.02',
     top1: 0.17,
-    top2: 0.32,
-    top3: 0.39,
-    top5: 0.53,
-    top7: 0.76,
   },
 }
