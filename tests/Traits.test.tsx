@@ -1,4 +1,4 @@
-import { Traits } from '../components/Traits-old'
+import { Traits } from '../components/Traits'
 import { render } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
