@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useRanking } from '../hooks/useRanking'
 import Image from 'next/image'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -14,17 +15,7 @@ interface RankingProps {
 dayjs.extend(utc)
 
 export const Ranking = ({ gameMode, count }: RankingProps) => {
-  const { isLoading, isError, error, data } = useQuery(
-    ['ranking', gameMode],
-    () => {
-      return axios
-        .get(`${process.env.NEXT_PUBLIC_ER_API_URL}/ranks/${gameMode}`)
-        .then((res) => res.data)
-    },
-    {
-      staleTime: 5 * 60 * 1000,
-    }
-  )
+  const { data } = useRanking({ gameMode, count })
 
   const title = () => {
     if (gameMode === 'solo') return '솔로'
@@ -32,8 +23,6 @@ export const Ranking = ({ gameMode, count }: RankingProps) => {
     else if (gameMode === 'squard') return '스쿼드'
   }
 
-  if (isLoading) return <div>loading...</div>
-  if (isError) return <div>error!!</div>
   return (
     <article className="card">
       <h2 className="text-xl text-center mb-3">{title()} 랭크 순위</h2>
@@ -75,6 +64,26 @@ export const Ranking = ({ gameMode, count }: RankingProps) => {
           })}
         </tbody>
       </table>
+    </article>
+  )
+}
+
+export const RankingSkeleton = () => {
+  return (
+    <article className="card">
+      <div className="animate-pulse">
+        <div className="flex justify-center">
+          <div className="h-4 bg-neutral-600 mb-3 w-40"></div>
+        </div>
+        <div className="flex justify-center">
+          <div className="h-2 bg-neutral-600 mt-3 w-32"></div>
+        </div>
+        <div className="text-center">
+          {new Array(10).fill(true).map((el, i) => (
+            <div className="h-4 bg-neutral-600 mt-7" key={i}></div>
+          ))}
+        </div>
+      </div>
     </article>
   )
 }

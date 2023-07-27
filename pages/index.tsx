@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
-import { Ranking } from '../components/Ranking'
+import React, { Suspense, useState } from 'react'
+import { Ranking, RankingSkeleton } from '../components/Ranking'
 
 const Home: NextPage = () => {
   const [nickname, setNickname] = useState('')
@@ -46,15 +46,21 @@ const Home: NextPage = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col items-center mx-10 xl:flex-row mt-4">
+      <div className="flex flex-col items-start mx-10 xl:flex-row mt-4 mb-3">
         <div className="mt-3 max-w-[600px] w-full xl:basis-[600px] xl:mx-3">
-          <Ranking gameMode="solo" count={5} />
+          <Suspense fallback={<RankingSkeleton />}>
+            <Ranking gameMode="solo" count={10} />
+          </Suspense>
         </div>
         <div className="mt-3 max-w-[600px] w-full xl:basis-[600px] xl:mx-3">
-          <Ranking gameMode="duo" count={5} />
+          <Suspense fallback={<RankingSkeleton />}>
+            <Ranking gameMode="duo" count={10} />
+          </Suspense>
         </div>
         <div className="mt-3 max-w-[600px] w-full xl:basis-[600px] xl:mx-3">
-          <Ranking gameMode="squard" count={5} />
+          <Suspense fallback={<RankingSkeleton />}>
+            <Ranking gameMode="squard" count={10} />
+          </Suspense>
         </div>
       </div>
     </>
