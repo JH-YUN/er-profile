@@ -46,18 +46,8 @@ const Home: NextPage = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col items-start mx-10 xl:flex-row mt-4 mb-3">
-        <div className="mt-3 max-w-[600px] w-full xl:basis-[600px] xl:mx-3">
-          <Suspense fallback={<RankingSkeleton />}>
-            <Ranking gameMode="solo" count={10} />
-          </Suspense>
-        </div>
-        <div className="mt-3 max-w-[600px] w-full xl:basis-[600px] xl:mx-3">
-          <Suspense fallback={<RankingSkeleton />}>
-            <Ranking gameMode="duo" count={10} />
-          </Suspense>
-        </div>
-        <div className="mt-3 max-w-[600px] w-full xl:basis-[600px] xl:mx-3">
+      <div className="flex mx-10 justify-center mt-4 mb-3">
+        <div className="mt-3 w-full basis-[600px]">
           <Suspense fallback={<RankingSkeleton />}>
             <Ranking gameMode="squard" count={10} />
           </Suspense>

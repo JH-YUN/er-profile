@@ -1,10 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
 import { useRanking } from '../hooks/useRanking'
-import Image from 'next/image'
-import axios from 'axios'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { mmrToTier } from '../util/mmrToTier'
 interface RankingProps {
@@ -17,15 +13,9 @@ dayjs.extend(utc)
 export const Ranking = ({ gameMode, count }: RankingProps) => {
   const { data } = useRanking({ gameMode, count })
 
-  const title = () => {
-    if (gameMode === 'solo') return '솔로'
-    else if (gameMode === 'duo') return '듀오'
-    else if (gameMode === 'squard') return '스쿼드'
-  }
-
   return (
     <article className="card">
-      <h2 className="text-xl text-center mb-3">{title()} 랭크 순위</h2>
+      <h2 className="text-xl text-center mb-3">랭크 순위</h2>
       <div className="text-center">
         <small>
           {dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')}{' '}
