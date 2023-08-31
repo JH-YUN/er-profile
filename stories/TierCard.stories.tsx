@@ -31,9 +31,9 @@ export const UnrankTier: Story = {
     rankSize: 50038,
     totalGames: 98,
     totalWins: 17,
-    averageRank: '4.83',
-    averageKills: '1.64',
-    averageHunts: '15.02',
+    averageRank: 4.83,
+    averageKills: 1.64,
+    averageHunts: 15.02,
     top1: 0.17,
   },
 }
