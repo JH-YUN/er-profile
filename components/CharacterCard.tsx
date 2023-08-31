@@ -24,7 +24,7 @@ export const CharacterCard = ({
   return (
     <>
       {!character ? (
-        <div className="card mt-2">
+        <div className="card">
           <div className="flex animate-pulse">
             <div
               className="mr-3 rounded bg-neutral-600"
@@ -38,7 +38,7 @@ export const CharacterCard = ({
           </div>
         </div>
       ) : (
-        <div className="card mt-2 py-2 px-4">
+        <div className="card py-2 px-4">
           <div className="text-right mb-2">
             <select className="w-[100px]" onChange={onChangeSkin}>
               {selectedCharacterSkins?.map((skin) => (

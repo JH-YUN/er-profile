@@ -18,12 +18,14 @@ interface UserStats {
   rankSize: number
   top1: number
   top2: number
+  top3: number
   nickname: string
   totalGames: number
   totalWins: number
-  averageRank: string
-  averageKills: string
-  averageHunts: string
+  averageRank: number
+  averageKills: number
+  averageAssistants: number
+  averageHunts: number
 }
 interface Character {
   code: number
@@ -123,12 +125,14 @@ interface TierCardProps {
   rankSize: number
   top1: number
   top2: number
+  top3: number
   nickname: string
   totalGames: number
   totalWins: number
-  averageRank: string
-  averageKills: string
-  averageHunts: string
+  averageRank: number
+  averageKills: number
+  averageAssistants: number
+  averageHunts: number
   showWinRate: boolean
   showTotalGames: boolean
   showAverageRank: boolean

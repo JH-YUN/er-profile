@@ -26,17 +26,20 @@ const TierCard = (stats: TierCardProps) => {
     rank,
     rankSize,
     top1,
+    top2,
+    top3,
     nickname,
     totalGames,
     totalWins,
     averageRank,
     averageKills,
+    averageAssistants,
     averageHunts,
   } = stats
   const { tier, lp, grade } = mmrToTier(mmr, rank, seasonId)
   return (
     <div
-      className={`card w-full min-h-[280px] tier-card-${tier.toLowerCase()}`}
+      className={`card w-full h-full min-h-[280px] tier-card-${tier.toLowerCase()}`}
     >
       <div className="card-contents">
         <div className="flex">
@@ -70,11 +73,26 @@ const TierCard = (stats: TierCardProps) => {
           ''
         ) : (
           <ul className="mt-2 font-bold">
-            <li>승률: {winPercent(totalGames, totalWins)}%</li>
             <li>게임 수: {totalGames}</li>
+            <li>승률: {winPercent(totalGames, totalWins)}%</li>
+            {seasonId > 19 ? (
+              <>
+                <li>TOP2: {top2 * 100}%</li>
+                <li>TOP3: {top3 * 100}%</li>
+              </>
+            ) : (
+              <></>
+            )}
             <li>평균 순위: {averageRank}</li>
             <li>평균 킬: {averageKills}</li>
             <li>평균 사냥: {averageHunts}</li>
+            {seasonId > 19 ? (
+              <>
+                <li>평균 어시: {averageAssistants}</li>
+              </>
+            ) : (
+              <></>
+            )}
           </ul>
         )}
       </div>

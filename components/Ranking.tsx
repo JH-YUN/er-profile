@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import Link from 'next/link'
 import { mmrToTier } from '../util/mmrToTier'
+import { useEffect, useState } from 'react'
 interface RankingProps {
   gameMode: 'solo' | 'duo' | 'squard'
   count?: number
@@ -12,15 +13,18 @@ dayjs.extend(utc)
 
 export const Ranking = ({ gameMode, count }: RankingProps) => {
   const { data } = useRanking({ gameMode, count })
+  const [updateAt, setUpdateAt] = useState('')
+  useEffect(() => {
+    setUpdateAt(
+      dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')
+    )
+  }, [])
 
   return (
     <article className="card">
       <h2 className="text-xl text-center mb-3">랭크 순위</h2>
       <div className="text-center">
-        <small>
-          {dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')}{' '}
-          기준
-        </small>
+        <small>{updateAt} 기준</small>
       </div>
       <table className="table-auto w-full text-center">
         <thead>

@@ -100,16 +100,16 @@ const User = ({
                 </option>
               ))}
             </select>
-            <button>
+            {/* <button>
               <CameraIcon
                 onClick={onClickCaputre}
                 className="h-8 w-8 text-slate-100 transition duration-150 ease-in-out group-hover:text-opacity-80`}"
                 aria-hidden="true"
               />
-            </button>
+            </button> */}
           </div>
         </div>
-        <Profile userStats={userStats} />
+        <Profile userStats={userStats} selectedSeason={selectedSeason} />
         <Games gameResults={gameResults} getMoreGames={getMoreGames} />
       </div>
     </>
@@ -156,6 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .replace('Pre-', '프리'),
         },
       }))
+      .sort((a, b) => b.seasonID - a.seasonID)
   }
 
   // 유저 정보 가져오기
