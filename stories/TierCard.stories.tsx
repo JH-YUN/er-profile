@@ -35,5 +35,8 @@ export const UnrankTier: Story = {
     averageKills: 1.64,
     averageHunts: 15.02,
     top1: 0.17,
+    top2: 0.22,
+    top3: 0.45,
+    averageAssistants: 2.13,
   },
 }
