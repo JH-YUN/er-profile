@@ -19,7 +19,7 @@ export const Games = ({ gameResults, getMoreGames }: GamesProps) => {
 
       <button
         type="button"
-        className="w-full mt-2 text-white bg-[#1a1b1e] focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+        className="w-full mt-2 text-white bg-[#1a1b1e] focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2"
         onClick={handleMoreGames}
       >
         더 보기
