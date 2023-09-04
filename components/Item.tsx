@@ -63,7 +63,7 @@ export const Item = ({ item }: ItemProps) => {
       const skillName = skill.name.replace(/\<(.+)\=(.+)\>(.+)\<\/(.+)\>/, '$3')
       const skillDesc = skill.desc
         .replace(/\<(.+)\=(.+)\>(.+)\<\/(.+)\>/, '$3')
-        .replace(/\{.\}/g, '?')
+        .replace(/\{.+\}/g, '?')
         .replaceAll('\\n', ' ')
 
       return (
