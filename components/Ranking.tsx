@@ -14,6 +14,7 @@ dayjs.extend(utc)
 export const Ranking = ({ gameMode, count }: RankingProps) => {
   const { data } = useRanking({ gameMode, count })
   const [updateAt, setUpdateAt] = useState('')
+  const seasonId = data.seasonId
   useEffect(() => {
     setUpdateAt(
       dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')
@@ -37,7 +38,7 @@ export const Ranking = ({ gameMode, count }: RankingProps) => {
         </thead>
         <tbody>
           {data.users.map((el: any, i: number) => {
-            const { tier, grade, lp } = mmrToTier(el.mmr, el.rank)
+            const { tier, grade, lp } = mmrToTier(el.mmr, el.rank, seasonId)
             return (
               <tr key={i} className=" border-b">
                 <td className="py-2">{el.rank}</td>
