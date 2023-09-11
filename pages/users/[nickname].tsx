@@ -34,7 +34,7 @@ const User = ({
   const [nextGameId, setNextGameId] = useState<number>()
 
   const onChangeSeason = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    router.replace(`/users/${router.query.nickname}?season=${e.target.value}`)
+    location.replace(`/users/${router.query.nickname}?season=${e.target.value}`)
   }
   const erApiAxios = createErApiAxios()
   const officialApiAxios = createOfficialApiAxios()

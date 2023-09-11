@@ -37,7 +37,7 @@ export const Profile = ({ userStats, selectedSeason }: ProfileProps) => {
     return <></>
   } else {
     // 얼리엑세스 시즌
-    if (Number(selectedSeason) > 19) {
+    if (Number(selectedSeason) < 19) {
       return (
         !!characterSkins && (
           <div className="flex flex-col w-full items-center lg:flex-row lg:items-start gap-10 mb-3">
