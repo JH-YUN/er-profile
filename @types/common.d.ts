@@ -40,6 +40,7 @@ interface CharacterSkin {
   code: number
   characterCode: number
 }
+
 interface GameResult {
   gameId: number
   seasonId: number
@@ -111,10 +112,6 @@ interface CharacterSkin {
   code: number
 }
 
-interface GamesProps {
-  gameResults: Array<GameResult>
-  getMoreGames: Function
-}
 interface GameCardProps extends GameResult {}
 
 interface TierCardProps {
@@ -183,4 +180,10 @@ interface Trait {
 interface Stat {
   id: string
   name: string
+}
+
+type Season = {
+  seasonName: string
+  isCurrent: 0 | 1
+  seasonID: number
 }
