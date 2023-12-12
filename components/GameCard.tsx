@@ -197,7 +197,7 @@ export const GameCard = (props: GameCardProps) => {
               <div>{matchingTeamModeMap[matchingTeamMode]}</div>
               <div>{matchingModeMap[matchingMode]}</div>
               <div>
-                <small>{`v0.${versionMajor}.${versionMinor}`}</small>
+                <small>{`v1.${versionMajor}.${versionMinor}`}</small>
               </div>
             </div>
           </div>

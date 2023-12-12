@@ -9,7 +9,9 @@ interface TraitProps {
 
 export const Trait = ({ trait, size }: TraitProps) => {
   const createTooltip = useCallback((trait: Trait) => {
-    const tooltip = trait.tooltip.replace(/\{.\}/g, '?').replaceAll('\\n', ' ')
+    const tooltip = trait?.tooltip
+      ?.replace(/\{.\}/g, '?')
+      .replaceAll('\\n', ' ')
     return (
       <>
         <h3 className="text-lg mb-2">{trait.name}</h3>

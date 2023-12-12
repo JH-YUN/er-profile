@@ -1,7 +1,5 @@
 import { memo, useState } from 'react'
 import { CharacterImage } from './CharacterImage'
-import { useQueries } from '@tanstack/react-query'
-import axios from 'axios'
 
 const getWinRate = (wins: number, total: number) => {
   return Math.round((wins / total) * 1000) / 10
