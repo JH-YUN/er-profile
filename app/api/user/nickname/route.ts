@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     }
   )
 
-  if (!res.ok) {
+  if (res.ok) {
     const result = await res.json()
     return NextResponse.json(result)
   } else {

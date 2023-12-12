@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET(
   req: Request,
-  params: { userNum: string; seasonId: string }
+  { params }: { params: { userNum: string; seasonId: string } }
 ) {
   const { userNum, seasonId } = params
 
@@ -12,6 +12,7 @@ export async function GET(
       headers: {
         'x-api-key': process.env.API_KEY || '',
       },
+      cache: 'no-store',
     }
   )
 
