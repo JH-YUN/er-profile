@@ -162,6 +162,6 @@ async function getRecentGames(userNum: string | number) {
     throw new Error('API ERROR')
   }
   const data = await res.json()
-  console.log(data.userGames[0].startDtm)
+
   return data
 }

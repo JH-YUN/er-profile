@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import { MemoGameCard } from './GameCard'
 import { GamesSkeleton } from '@/components/skeleton/GamesSkeleton'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
 type GamesProps = {
@@ -16,28 +16,36 @@ type GamesProps = {
 
 export const Games = ({ initGames, userNum }: GamesProps) => {
   const { next, userGames } = initGames
-  const [nextGameId, setNextGameId] = useState<number>(next)
 
-  const { isLoading, data } = useQuery<Array<GameResult>>(
-    ['games', nextGameId],
-    async () => {
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ['games'],
+    queryFn: async ({ pageParam }) => {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/user/games/${userNum}?next=${nextGameId}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/user/games/${userNum}`,
+        {
+          params: {
+            next: pageParam ?? '',
+          },
+        }
       )
-
-      return data.userGames
+      return data.userGames ?? []
     },
-    {
-      initialData: userGames,
-      // cacheTime: 0,
-      // staleTime: 0,
-    }
-  )
-  const [gameList, setGameList] = useState<Array<GameResult>>(data)
+    getNextPageParam: (lastPage) => {
+      if (lastPage) {
+        return lastPage.at(-1)?.gameId
+      } else {
+        return null
+      }
+    },
+    suspense: true,
+    initialData: {
+      pages: [userGames],
+      pageParams: [28491314],
+    },
+  })
 
   const handleMoreGames = () => {
-    setGameList([...gameList, ...data])
-    setNextGameId(data.at(-1)!.gameId)
+    fetchNextPage()
   }
 
   return (
@@ -47,19 +55,15 @@ export const Games = ({ initGames, userNum }: GamesProps) => {
           전적<small>(최근 90일)</small>
         </h1>
       </div>
-      <div>
-        {/* {initGameList.map((game, i) => (
-          <div className="mb-1" key={game.gameId}>
-            <MemoGameCard {...game} />
-          </div>
-        ))} */}
-      </div>
+
       <Suspense fallback={<GamesSkeleton count={10} />}>
-        {gameList.map((game, i) => (
-          <div className="mb-1" key={game.gameId}>
-            <MemoGameCard {...game} />
-          </div>
-        ))}
+        {data!.pages.map((page) =>
+          page.map((game, i) => (
+            <div className="mb-1" key={game.gameId}>
+              <MemoGameCard {...game} />
+            </div>
+          ))
+        )}
       </Suspense>
 
       <button
@@ -67,7 +71,7 @@ export const Games = ({ initGames, userNum }: GamesProps) => {
         className="w-full mt-2 text-white bg-[#1a1b1e] focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2"
         onClick={handleMoreGames}
       >
-        더 보기
+        {hasNextPage ? '더 보기' : '마지막 게임입니다.'}
       </button>
     </>
   )
