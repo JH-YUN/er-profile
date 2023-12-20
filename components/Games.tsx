@@ -59,7 +59,7 @@ export const Games = ({ initGames, userNum }: GamesProps) => {
 
       <Suspense fallback={<GamesSkeleton count={10} />}>
         {data!.pages.map((page) =>
-          page.map((game, i) => (
+          page.map((game: GameResult, i: number) => (
             <div className="mb-1" key={game.gameId}>
               <MemoGameCard {...game} />
             </div>
