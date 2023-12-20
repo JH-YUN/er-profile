@@ -40,7 +40,7 @@ export const Games = ({ initGames, userNum }: GamesProps) => {
     suspense: true,
     initialData: {
       pages: [userGames],
-      pageParams: [28491314],
+      pageParams: [next],
     },
   })
 
