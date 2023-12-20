@@ -40,8 +40,9 @@ export const Games = ({ initGames, userNum }: GamesProps) => {
     suspense: true,
     initialData: {
       pages: [userGames],
-      pageParams: [next],
+      pageParams: [''],
     },
+    cacheTime: 0,
   })
 
   const handleMoreGames = () => {
