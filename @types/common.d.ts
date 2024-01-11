@@ -61,7 +61,6 @@ interface GameResult {
     '2'?: number // 머리
     '3'?: number // 팔
     '4'?: number // 다리
-    '5'?: number // 장신구
   }
   versionMajor: number
   versionMinor: number
