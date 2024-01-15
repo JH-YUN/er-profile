@@ -3,6 +3,8 @@ import { MemoTierCard } from './TierCard'
 import { MemoCharacterCard } from './CharacterCard'
 import { useQueries } from '@tanstack/react-query'
 import axios from 'axios'
+import useCharacters from '@/hooks/useCharacter'
+import useCharacterSkins from '@/hooks/useCharacterSkins'
 
 interface ProfileProps {
   userStats: Array<UserStats>
@@ -10,29 +12,8 @@ interface ProfileProps {
 }
 
 export const Profile = ({ userStats, selectedSeason }: ProfileProps) => {
-  const [characters, characterSkins] = useQueries({
-    queries: [
-      {
-        queryKey: ['characters'],
-        queryFn: async (): Promise<Array<Character>> => {
-          const { data } = await axios(
-            `${process.env.NEXT_PUBLIC_ER_API_URL}/characters`
-          )
-          return data
-        },
-      },
-      {
-        queryKey: ['characterSkins'],
-        queryFn: async (): Promise<Array<CharacterSkin>> => {
-          const { data } = await axios(
-            `${process.env.NEXT_PUBLIC_ER_API_URL}/character-skins`
-          )
-
-          return data
-        },
-      },
-    ],
-  })
+  const characters = useCharacters()
+  const characterSkins = useCharacterSkins()
 
   // 얼리엑세스 시즌은 솔듀스 3개 모드
   // 정규 시즌은 스쿼드 하나
