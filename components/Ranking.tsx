@@ -1,9 +1,8 @@
-import { useRanking } from '../hooks/useRanking'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import Link from 'next/link'
 import { mmrToTier } from '../util/mmrToTier'
-import { useEffect, useState } from 'react'
+
 interface RankingProps {
   gameMode: 'solo' | 'duo' | 'squard'
   count?: number
@@ -11,21 +10,24 @@ interface RankingProps {
 
 dayjs.extend(utc)
 
-export const Ranking = ({ gameMode, count }: RankingProps) => {
-  const { data } = useRanking({ gameMode, count })
-  const [updateAt, setUpdateAt] = useState('')
+export const Ranking = async ({ gameMode, count }: RankingProps) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ER_API_URL}/ranks/${gameMode}?count=${count}`,
+    { next: { revalidate: 60 } }
+  )
+
+  const data = await res.json()
+
   const seasonId = data.seasonId
-  useEffect(() => {
-    setUpdateAt(
-      dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')
-    )
-  }, [])
 
   return (
     <article className="card">
       <h2 className="text-xl text-center mb-3">랭크 순위</h2>
       <div className="text-center">
-        <small>{updateAt} 기준</small>
+        <small>
+          {dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')}{' '}
+          기준
+        </small>
       </div>
       <table className="table-auto w-full text-center">
         <thead>
@@ -63,22 +65,4 @@ export const Ranking = ({ gameMode, count }: RankingProps) => {
   )
 }
 
-export const RankingSkeleton = () => {
-  return (
-    <article className="card">
-      <div className="animate-pulse">
-        <div className="flex justify-center">
-          <div className="h-4 bg-neutral-600 mb-3 w-40"></div>
-        </div>
-        <div className="flex justify-center">
-          <div className="h-2 bg-neutral-600 mt-3 w-32"></div>
-        </div>
-        <div className="text-center">
-          {new Array(10).fill(true).map((el, i) => (
-            <div className="h-4 bg-neutral-600 mt-7" key={i}></div>
-          ))}
-        </div>
-      </div>
-    </article>
-  )
-}
+export default Ranking

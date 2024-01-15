@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useCallback } from 'react'
 import React from 'react'
+import useStats from '@/hooks/useStats'
 
 interface ItemProps {
   item: Item | null
@@ -29,16 +30,7 @@ const itemGradeClass = {
 }
 
 export const Item = ({ item }: ItemProps) => {
-  const { data, isLoading } = useQuery(
-    ['stats'],
-    async (): Promise<Array<Stat>> => {
-      const { data } = await axios(
-        `${process.env.NEXT_PUBLIC_ER_API_URL}/stats`
-      )
-
-      return data
-    }
-  )
+  const { data, isLoading } = useStats()
 
   const createTooltip = useCallback((item: Item, stats: Array<Stat>) => {
     const options = Object.entries(item.option).map(

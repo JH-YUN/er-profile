@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-interface UseRankingProrps {
-  gameMode: 'solo' | 'duo' | 'squard'
-  count?: number
+type Param = {
+  userNum: number | string
+  next: number | string | undefined | null
 }
-export const useRanking = ({ gameMode, count = 10 }: UseRankingProrps) => {
+export const useRecentGame = ({ userNum, next }: Param) => {
   const { data } = useQuery(
-    ['ranking', gameMode],
+    [userNum, next],
     () => {
       return axios
         .get(
-          `${process.env.NEXT_PUBLIC_ER_API_URL}/ranks/${gameMode}?count=${count}`
+          `${process.env.NEXT_PUBLIC_ER_API_URL}/user/games/${userNum}?next=${
+            next ?? ''
+          }`
         )
         .then((res) => res.data)
     },

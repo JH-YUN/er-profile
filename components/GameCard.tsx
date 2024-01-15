@@ -6,8 +6,10 @@ import dayjs from 'dayjs'
 import { Traits } from './Traits'
 import { Items } from './Items'
 import { CharacterImage } from './CharacterImage'
-import { useQueries } from '@tanstack/react-query'
-import axios, { AxiosResponse } from 'axios'
+import useCharacters from '@/hooks/useCharacter'
+import useCharacterSkins from '@/hooks/useCharacterSkins'
+import useItems from '@/hooks/useItems'
+import useTraits from '@/hooks/useTraits'
 
 export const GameCard = (props: GameCardProps) => {
   const {
@@ -43,50 +45,11 @@ export const GameCard = (props: GameCardProps) => {
     routeIdOfStart,
     escapeState,
   } = props
-  const [characters, characterSkins, items, traits] = useQueries({
-    queries: [
-      {
-        queryKey: ['characters'],
-        queryFn: async (): Promise<Array<Character>> => {
-          const { data } = await axios(
-            `${process.env.NEXT_PUBLIC_ER_API_URL}/characters`
-          )
-          return data
-        },
-      },
-      {
-        queryKey: ['characterSkins'],
-        queryFn: async (): Promise<Array<CharacterSkin>> => {
-          const { data } = await axios(
-            `${process.env.NEXT_PUBLIC_ER_API_URL}/character-skins`
-          )
 
-          return data
-        },
-      },
-      {
-        queryKey: ['items'],
-        queryFn: async (): Promise<Array<Item>> => {
-          const { data } = await axios(
-            `${process.env.NEXT_PUBLIC_ER_API_URL}/items`
-          )
-
-          return data
-        },
-      },
-      {
-        queryKey: ['traits'],
-        queryFn: async (): Promise<Array<Trait>> => {
-          const { data } = await axios(
-            `${process.env.NEXT_PUBLIC_ER_API_URL}/traits`
-          )
-
-          return data
-        },
-      },
-    ],
-  })
-
+  const characters = useCharacters()
+  const characterSkins = useCharacterSkins()
+  const items = useItems()
+  const traits = useTraits()
   const playerCharaceter = characters.data?.find(
     (character) => character.code === characterNum
   )
@@ -105,7 +68,6 @@ export const GameCard = (props: GameCardProps) => {
     '2': null,
     '3': null,
     '4': null,
-    '5': null,
   }
   const equipmentItems = { ...emptyEquipment, ...equipment }
   const equipments: Array<Item | null> = Object.entries(equipmentItems).map(
