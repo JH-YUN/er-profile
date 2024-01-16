@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
 import Link from 'next/link'
 import { mmrToTier } from '../util/mmrToTier'
 
@@ -8,8 +7,6 @@ interface RankingProps {
   count?: number
 }
 
-dayjs.extend(utc)
-
 export const Ranking = async ({ gameMode, count }: RankingProps) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ER_API_URL}/ranks/${gameMode}?count=${count}`,
@@ -17,16 +14,13 @@ export const Ranking = async ({ gameMode, count }: RankingProps) => {
   )
 
   const data = await res.json()
-
   const seasonId = data.seasonId
-
   return (
     <article className="card">
       <h2 className="text-xl text-center mb-3">랭크 순위</h2>
       <div className="text-center">
         <small>
-          {dayjs(data.updateAt).utc(true).local().format('YYYY-MM-DD HH:mm')}{' '}
-          기준
+          {dayjs.utc(data.updateAt).local().format('YYYY-MM-DD HH:mm')} 기준
         </small>
       </div>
       <table className="table-auto w-full text-center">
