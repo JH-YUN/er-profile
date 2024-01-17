@@ -20,7 +20,7 @@ export const Ranking = async ({ gameMode, count }: RankingProps) => {
       <h2 className="text-xl text-center mb-3">랭크 순위</h2>
       <div className="text-center">
         <small>
-          {dayjs.utc(data.updateAt).local().format('YYYY-MM-DD HH:mm')} 기준
+          {dayjs.utc(data.updateAt).tz().format('YYYY-MM-DD HH:mm')} 기준
         </small>
       </div>
       <table className="table-auto w-full text-center">
