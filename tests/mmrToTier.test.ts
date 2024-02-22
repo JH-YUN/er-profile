@@ -1,5 +1,95 @@
 import { mmrToTier } from '../util/mmrToTier'
 
+describe('mmr to tier test after 3 season', () => {
+  it('eternity mmr', () => {
+    expect(mmrToTier(7919, 1, 23)).toStrictEqual({
+      tier: 'Eternity',
+      grade: '',
+      lp: 1719,
+    })
+    expect(mmrToTier(6363, 200, 23)).toStrictEqual({
+      tier: 'Mithril',
+      grade: '',
+      lp: 163,
+    })
+  })
+  it('demigod mmr', () => {
+    expect(mmrToTier(6463, 201, 23)).toStrictEqual({
+      tier: 'Demigod',
+      grade: '',
+      lp: 263,
+    })
+    expect(mmrToTier(6198, 400, 23)).toStrictEqual({
+      tier: 'Diamond',
+      grade: 1,
+      lp: 348,
+    })
+  })
+  it('demigod mmr but low rank', () => {
+    expect(mmrToTier(6500, 701, 23)).toStrictEqual({
+      tier: 'Mithril',
+      grade: '',
+      lp: 300,
+    })
+    expect(mmrToTier(6823, 910, 23)).toStrictEqual({
+      tier: 'Mithril',
+      grade: '',
+      lp: 623,
+    })
+  })
+  it('mithril mmr', () => {
+    expect(mmrToTier(6266, 1, 23)).toStrictEqual({
+      tier: 'Mithril',
+      grade: '',
+      lp: 66,
+    })
+  })
+  it('diamond mmr', () => {
+    expect(mmrToTier(6133, 2, 23)).toStrictEqual({
+      tier: 'Diamond',
+      grade: 1,
+      lp: 283,
+    })
+  })
+  it('platinum mmr', () => {
+    expect(mmrToTier(3726, 2268, 23)).toStrictEqual({
+      tier: 'Platinum',
+      grade: 4,
+      lp: 126,
+    })
+  })
+  it('gold mmr', () => {
+    expect(mmrToTier(3237, 31967, 23)).toStrictEqual({
+      tier: 'Gold',
+      grade: 2,
+      lp: 137,
+    })
+  })
+
+  it('silver mmr test', () => {
+    expect(mmrToTier(2232, 39571, 23)).toStrictEqual({
+      tier: 'Silver',
+      grade: 2,
+      lp: 132,
+    })
+  })
+
+  it('bronze mmr test', () => {
+    expect(mmrToTier(801, 66805, 23)).toStrictEqual({
+      tier: 'Bronze',
+      grade: 4,
+      lp: 1,
+    })
+  })
+
+  it('iron mmr test', () => {
+    expect(mmrToTier(661, 66805, 23)).toStrictEqual({
+      tier: 'Iron',
+      grade: 1,
+      lp: 61,
+    })
+  })
+})
 describe('mmr to tier test after 1.0 season', () => {
   it('eternity mmr', () => {
     expect(mmrToTier(7919, 1, 19)).toStrictEqual({

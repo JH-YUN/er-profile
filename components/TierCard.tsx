@@ -77,8 +77,8 @@ const TierCard = (stats: TierCardProps) => {
             <li>승률: {winPercent(totalGames, totalWins)}%</li>
             {seasonId > 19 ? (
               <>
-                <li>TOP2: {top2 * 100}%</li>
-                <li>TOP3: {top3 * 100}%</li>
+                <li>TOP2: {(top2 * 100).toFixed(0)}%</li>
+                <li>TOP3: {(top3 * 100).toFixed(0)}%</li>
               </>
             ) : (
               <></>
