@@ -55,15 +55,17 @@ export const mmrToTier = (
       tier = 'Diamond'
     } else {
       grade = '' // 미스릴 이상은 grade가 없음
-      lp = mmr - 6200
       if (mmr >= 6400 && rank <= 200) {
         //  6400점 이상, 랭킹 200위 이내 이터니티
         tier = 'Eternity'
+        lp = mmr - 6400
       } else if (mmr >= 6400 && rank <= 700) {
         // 6400점 이상, 랭킹 700위 이내 데미갓
         tier = 'Demigod'
+        lp = mmr - 6400
       } else {
         tier = 'Mithril'
+        lp = mmr - 6200
       }
     }
   } else {

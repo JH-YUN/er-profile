@@ -5,19 +5,19 @@ describe('mmr to tier test after 3 season', () => {
     expect(mmrToTier(7919, 1, 23)).toStrictEqual({
       tier: 'Eternity',
       grade: '',
-      lp: 1719,
+      lp: 1519,
     })
-    expect(mmrToTier(6363, 200, 23)).toStrictEqual({
-      tier: 'Mithril',
+    expect(mmrToTier(6462, 200, 23)).toStrictEqual({
+      tier: 'Eternity',
       grade: '',
-      lp: 163,
+      lp: 62,
     })
   })
   it('demigod mmr', () => {
     expect(mmrToTier(6463, 201, 23)).toStrictEqual({
       tier: 'Demigod',
       grade: '',
-      lp: 263,
+      lp: 63,
     })
     expect(mmrToTier(6198, 400, 23)).toStrictEqual({
       tier: 'Diamond',
